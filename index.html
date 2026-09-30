@@ -1104,6 +1104,63 @@ html { scrollbar-color: color-mix(in srgb, var(--moon) 55%, var(--panel)) var(--
 .cta-row.hl { max-width: none; }
 .cta-row:not(.hl) .btn { flex: 1 1 auto; text-align: center; justify-content: center; display: inline-flex; }
 @media (max-width: 640px) { .hero-main > .cta { display: grid; width: 100%; } }
+
+/* ---------- Dial v2: evenly spaced curved rail, no 3D squash ---------- */
+.secwheel { right: 12px; width: auto; height: auto; perspective: none; }
+.sw-view { position: relative; inset: auto; overflow: visible; -webkit-mask-image: none; mask-image: none; }
+.sw-track { position: relative; transform: none !important; gap: 2px; }
+.sw-item { height: 26px; opacity: 1; padding: 0 0 0 8px; }
+.sw-tick { width: 10px; height: 2px; }
+.sw-item:hover .sw-tick { width: 18px; }
+.sw-item.on .sw-tick { width: 24px; height: 3px; }
+.sw-item .sw-label { font-size: .68rem; }
+.sw-count { position: static; display: block; text-align: right; margin-top: 8px; padding-right: 0; }
+@media (max-width: 1199px) { .secwheel { display: none; } }
+@media (max-width: 1199px) { .sec-toast { display: flex; } }
+
+/* ---------- Flipped cards size themselves to the screenshots ---------- */
+.proj-item.sized .flip-inner > .front { position: absolute; inset: 0; }
+.proj-item.sized .flip-inner > .back { position: relative; inset: auto; }
+.projects > .proj.sized { align-self: start; }
+.proj-item.sized .back .gal, .proj-item.sized .back .gal-view { flex: none; }
+.proj-item.sized .back .gal-track, .proj-item.sized .back .gal-track figure, .proj-item.sized .back .gal-zoom { height: auto; }
+.proj-item.sized .back .gal-zoom img { height: auto; aspect-ratio: 16 / 10; max-height: min(50vh, 440px); }
+.proj-item.sized .trio-row { height: auto; }
+.proj-item.sized .trio-row .gal-zoom img { aspect-ratio: 9 / 19; max-height: min(50vh, 420px); }
+.proj-item.sized .back .api { flex: none; max-height: min(60vh, 520px); }
+
+.sw-next { pointer-events: auto; display: block; margin: 6px 0 0 auto; padding: 5px 9px; font-family: var(--mono); font-size: .64rem; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--moon); background: color-mix(in srgb, var(--panel) 90%, transparent); border: 1px solid color-mix(in srgb, var(--moon) 45%, var(--rule)); cursor: pointer; transition: transform .2s, border-color .2s, box-shadow .25s; }
+.sw-next:hover { transform: translateY(2px); border-color: var(--moon); box-shadow: 0 0 16px -6px var(--moon); }
+.sw-item.on { cursor: s-resize; }
+
+/* ---------- Dial v3: no boxes, also on mobile ---------- */
+.sw-label { background: none !important; border: 0 !important; box-shadow: none !important; padding: 2px 4px; text-shadow: 0 0 6px var(--bg), 0 0 2px var(--bg), 0 0 1px var(--bg); }
+.secwheel.pop .sw-item.on .sw-label, .secwheel:hover .sw-item.on .sw-label { color: var(--moon); text-shadow: 0 0 14px color-mix(in srgb, var(--moon) 70%, transparent), 0 0 3px var(--bg); }
+.sw-next { background: none !important; border: 0 !important; box-shadow: none !important; padding: 4px 0; text-shadow: 0 0 6px var(--bg); }
+.sw-next:hover { text-shadow: 0 0 12px var(--moon); }
+@media (max-width: 1199px) {
+  .secwheel { display: block; right: 3px; }
+  .sec-toast { display: none !important; }
+  .sw-item { height: 22px; padding-left: 6px; gap: 6px; }
+  .sw-tick { width: 6px; }
+  .sw-item:hover .sw-tick { width: 9px; }
+  .sw-item.on .sw-tick { width: 14px; }
+  .sw-label { font-size: .6rem; }
+  .sw-count, .sw-next { font-size: .56rem; }
+}
+
+/* Dial: larger on PC */
+@media (min-width: 1200px) {
+  .secwheel { right: 16px; }
+  .sw-item { height: 34px; gap: 12px; }
+  .sw-tick { width: 14px; height: 2px; }
+  .sw-item:hover .sw-tick { width: 24px; }
+  .sw-item.on .sw-tick { width: 34px; height: 3px; }
+  .sw-item .sw-label { font-size: .8rem; }
+  .sw-count { font-size: .72rem; margin-top: 10px; }
+  .sw-next { font-size: .72rem; }
+}
 </style>
 </head>
 <body>
@@ -2224,7 +2281,17 @@ html { scrollbar-color: color-mix(in srgb, var(--moon) 55%, var(--panel)) var(--
   document.querySelectorAll('.proj-item.flip').forEach(function (card) {
     var front = card.querySelector('.face.front'), back = card.querySelector('.face.back');
     var openBtn = front.querySelector('.flip-btn.open'), closeBtn = back.querySelector('.flip-btn.close');
+    var inner = card.querySelector('.flip-inner');
     function set(on) {
+      var h0 = inner.offsetHeight;
+      card.classList.toggle('sized', on);
+      var h1 = inner.offsetHeight;
+      if (!reduce && Math.abs(h1 - h0) > 2) {
+        inner.style.height = h0 + 'px'; void inner.offsetHeight;
+        inner.style.transition = 'transform .85s cubic-bezier(.2,.7,.2,1), height .6s cubic-bezier(.2,.75,.2,1)';
+        inner.style.height = h1 + 'px';
+        setTimeout(function () { inner.style.height = ''; inner.style.transition = ''; }, 700);
+      }
       card.classList.toggle('flipped', on);
       front.inert = on; back.inert = !on;
       front.setAttribute('aria-hidden', String(on)); back.setAttribute('aria-hidden', String(!on));
@@ -2276,19 +2343,20 @@ html { scrollbar-color: color-mix(in srgb, var(--moon) 55%, var(--panel)) var(--
   var targets = defs.map(function (d) { return { el: sec(d[0]), label: d[1] }; }).filter(function (t) { return t.el; });
   if (!targets.length) return;
 
-  var wheel = document.createElement('nav');
-  wheel.className = 'secwheel'; wheel.setAttribute('aria-label', 'Sections');
-  wheel.innerHTML = '<div class="sw-view"><div class="sw-track"></div></div><span class="sw-count" aria-hidden="true"></span>';
+  var wheel = document.createElement('div');
+  wheel.className = 'secwheel'; wheel.setAttribute('role', 'navigation'); wheel.setAttribute('aria-label', 'Sections');
+  wheel.innerHTML = '<div class="sw-view"><div class="sw-track"></div></div><span class="sw-count" aria-hidden="true"></span><button class="sw-next" type="button" aria-label="Next section">Next ↓</button>';
   var track = wheel.querySelector('.sw-track'), count = wheel.querySelector('.sw-count');
   var items = targets.map(function (t, i) {
     var b = document.createElement('button');
     b.type = 'button'; b.className = 'sw-item'; b.setAttribute('aria-label', 'Go to ' + t.label);
     b.innerHTML = '<span class="sw-label"></span><span class="sw-tick"></span>';
     b.querySelector('.sw-label').textContent = t.label;
-    b.addEventListener('click', function () { go(i); });
+    b.addEventListener('click', function () { go(i === active ? (active + 1) % targets.length : i); });
     track.appendChild(b); return b;
   });
   document.body.appendChild(wheel);
+  wheel.querySelector('.sw-next').addEventListener('click', function () { go((active + 1) % targets.length); });
   var toast = document.createElement('div');
   toast.className = 'sec-toast'; toast.setAttribute('aria-hidden', 'true');
   document.body.appendChild(toast);
@@ -2296,13 +2364,13 @@ html { scrollbar-color: color-mix(in srgb, var(--moon) 55%, var(--panel)) var(--
   var active = -1, popT, toastT, ITEM = 36, H = 300;
   function pad(n) { return (n < 10 ? '0' : '') + n; }
   function paint() {
-    track.style.transform = 'translateY(' + (H / 2 - (active * ITEM + ITEM / 2)) + 'px)';
+    
     items.forEach(function (b, i) {
       var d = i - active, a = Math.abs(d);
       b.classList.toggle('on', d === 0);
       if (d === 0) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current');
-      b.style.transform = 'rotateX(' + (-d * 16) + 'deg) translateZ(' + (-a * 14) + 'px) scale(' + Math.max(.72, 1 - a * .09) + ')';
-      b.style.opacity = String(Math.max(.18, 1 - a * .22));
+      b.style.transform = 'translateX(' + (-Math.round((innerWidth < 1200 ? 3 : 12) * Math.cos(Math.min(a, 5) * 0.32))) + 'px)';
+      b.style.opacity = String(Math.max(.4, 1 - a * .12));
     });
     count.textContent = pad(active + 1) + ' / ' + pad(targets.length);
   }

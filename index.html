@@ -508,6 +508,12 @@ tbody tr:hover th { color: var(--ink); }
 html, body { overflow-x: clip; }
 
 h1 .word { display: inline-block; white-space: nowrap; }
+
+/* Infra lab list: name + tag on one line, rows share the panel height evenly, content centred */
+.svc { display: grid; grid-auto-rows: 1fr; }
+.svc-row { align-content: center; align-items: center; row-gap: 6px; }
+.svc-row .tag { grid-column: auto; justify-self: end; font-family: var(--mono); font-size: .7rem; color: var(--moon); padding: 3px 8px; border: 1px solid color-mix(in srgb, var(--moon) 40%, var(--rule)); background: color-mix(in srgb, var(--moon) 8%, transparent); }
+.svc-row b { font-size: .95rem; }
 </style>
 </head>
 <body>

@@ -611,6 +611,10 @@ h1 .word { display: inline-block; white-space: nowrap; }
 .lab-notes > .proj .flow { flex: 1; display: flex; flex-direction: column; margin-top: 6px; }
 .lab-notes > .proj .flow li { flex: 1; display: flex; flex-direction: column; justify-content: center; }
 .flow li:first-child::after { display: none; }
+
+/* Carousel baseline always visible; focus makes it brighter */
+.pk-view { box-shadow: inset 0 -2px 0 color-mix(in srgb, var(--moon) 75%, transparent); }
+.picker:focus-within .pk-view { box-shadow: inset 0 -3px 0 var(--moon); }
 </style>
 </head>
 <body>

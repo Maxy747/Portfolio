@@ -325,6 +325,36 @@ footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8p
   .job.current .dot { animation: pulse 2.4s ease-in-out infinite; }
 }
 @media (hover: none) { .spot, .glowline { display: none; } }
+
+/* ---------- Per-project identity colours ---------- */
+:root { --c-vris: #2ee6d6; --c-nilavus: #4d7cff; --c-pulse: #39ff14; --c-cyber: #ff4d6a; --c-namma: #ffc233; --c-cicd: #a78bfa; --c-max: #f472d0; --c-linux: #ff8a3d; }
+@media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) { --c-vris: #0b8a80; --c-nilavus: #1f45d6; --c-pulse: #1f8f00; --c-cyber: #c8102e; --c-namma: #a86b00; --c-cicd: #6d28d9; --c-max: #b3198f; --c-linux: #c2410c; } }
+:root[data-theme="light"] { --c-vris: #0b8a80; --c-nilavus: #1f45d6; --c-pulse: #1f8f00; --c-cyber: #c8102e; --c-namma: #a86b00; --c-cicd: #6d28d9; --c-max: #b3198f; --c-linux: #c2410c; }
+.p-vris { --pc: var(--c-vris); }
+.p-nilavus { --pc: var(--c-nilavus); }
+.p-pulse { --pc: var(--c-pulse); }
+.p-cyber { --pc: var(--c-cyber); }
+.p-namma { --pc: var(--c-namma); }
+.p-cicd { --pc: var(--c-cicd); }
+.p-max { --pc: var(--c-max); }
+.p-linux { --pc: var(--c-linux); }
+.proj-item { --pc: var(--moon); border-top: 2px solid var(--pc); }
+.proj-item .kind, .proj-item .links a { color: var(--pc); }
+.proj-item .kind::before { content: ""; display: inline-block; width: 7px; height: 7px; margin-right: 8px; background: var(--pc); box-shadow: 0 0 10px var(--pc); vertical-align: 1px; }
+.proj-item .pts li b { color: color-mix(in srgb, var(--pc) 60%, var(--ink-2)); }
+.proj-item h3 { transition: color .2s; }
+.proj-item:hover h3 { color: var(--pc); }
+.proj-item:hover { border-color: color-mix(in srgb, var(--pc) 55%, var(--rule)); border-top-color: var(--pc); box-shadow: 0 18px 44px -22px color-mix(in srgb, var(--pc) 60%, transparent); }
+.proj-item .glowline { background: radial-gradient(260px circle at var(--gx, 50%) var(--gy, 50%), color-mix(in srgb, var(--pc) 80%, transparent), transparent 60%) border-box; }
+.proj-item .stack li:hover { border-color: var(--pc); color: var(--pc); }
+.proj-item .stack li { border-color: color-mix(in srgb, var(--pc) 22%, var(--rule)); }
+.feature.proj-item { border-color: var(--pc); border-top-width: 2px; }
+.feature.proj-item .arch { background: color-mix(in srgb, var(--pc) 5%, var(--panel-2)); }
+.feature .flow li + li::before, .feature .flow li::after { background: var(--pc); }
+.feature .flow li { border-color: color-mix(in srgb, var(--pc) 30%, var(--rule)); }
+/* The infra lab is NILAVUS, so it takes PS2 blue */
+#lab { --moon: var(--c-nilavus); }
+#lab .proj { border-top: 2px solid var(--c-nilavus); }
 </style>
 </head>
 <body>
@@ -409,7 +439,7 @@ footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8p
       </div>
     </div>
 
-    <article class="feature proj-item" data-tags="ai app">
+    <article class="p-vris feature proj-item" data-tags="ai app">
       <div class="body">
         <div class="proj-top"><span class="kind">Featured · BE major project</span><span class="when">Feb 2025 – Jan 2026</span></div>
         <h3>AI-VRIS · AI-Powered VR Interview Simulator</h3>
@@ -435,7 +465,7 @@ footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8p
     </article>
 
     <div class="projects" id="projects-grid">
-      <article class="proj proj-item" data-tags="ops hw">
+      <article class="p-nilavus proj proj-item" data-tags="ops hw">
         <div class="proj-top"><span class="kind">Self-hosted home cloud</span><span class="when">Ongoing</span></div>
         <h3>NILAVUS</h3>
         <p>A personal cloud and distributed home server built from repurposed hardware, with one dashboard to reach every service locally or remotely.</p>
@@ -447,7 +477,7 @@ footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8p
         <div class="links"><a href="https://maxy747.github.io/NILAVUS/" target="_blank" rel="noopener">Live dashboard ↗</a><a href="https://github.com/Maxy747/NILAVUS" target="_blank" rel="noopener">Repository ↗</a></div>
       </article>
 
-      <article class="proj proj-item" data-tags="app hw">
+      <article class="p-pulse proj proj-item" data-tags="app hw">
         <div class="proj-top"><span class="kind">Arduino drums · Windows</span><span class="when">Personal project</span></div>
         <h3>Pulse</h3>
         <p>A Windows app that turns a homemade Arduino drum kit into a playable instrument, with responsive samples and a live view on an iPad.</p>
@@ -460,7 +490,7 @@ footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8p
         <div class="links"><a href="https://maxy747.github.io/pulse-drums-site/" target="_blank" rel="noopener">Live site ↗</a><a href="https://github.com/Maxy747/pulse-drums-site" target="_blank" rel="noopener">Website source ↗</a></div>
       </article>
 
-      <article class="proj proj-item" data-tags="sec ops">
+      <article class="p-cyber proj proj-item" data-tags="sec ops">
         <div class="proj-top"><span class="kind">SOC incident management</span><span class="when">May – Jun 2026</span></div>
         <h3>CyberGuard</h3>
         <p>A backend platform for SOC teams to log, investigate and resolve security incidents through a secure REST API.</p>
@@ -473,7 +503,7 @@ footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8p
         <div class="links"><a href="https://github.com/Maxy747/cybersecurity-incident-tracker" target="_blank" rel="noopener">Repository ↗</a></div>
       </article>
 
-      <article class="proj proj-item" data-tags="app">
+      <article class="p-namma proj proj-item" data-tags="app">
         <div class="proj-top"><span class="kind">Android · MindMatrix</span><span class="when">Apr – May 2026</span></div>
         <h3>NammaShaaleInventory</h3>
         <p>Schools lose track of their assets. This Android app gives every item a QR code so it can be scanned, identified, and tracked.</p>
@@ -484,7 +514,7 @@ footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8p
         <div class="links"><a href="https://github.com/Maxy747/NammaShaaleInventory" target="_blank" rel="noopener">Repository ↗</a></div>
       </article>
 
-      <article class="proj proj-item" data-tags="ops">
+      <article class="p-cicd proj proj-item" data-tags="ops">
         <div class="proj-top"><span class="kind">DevOps pipeline</span><span class="when">Sep – Oct 2024</span></div>
         <h3>Containerized CI/CD Pipeline</h3>
         <p>An end-to-end pipeline that takes a Flask app from commit to a running Kubernetes deployment without manual steps.</p>
@@ -495,7 +525,7 @@ footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8p
         <div class="links"><a href="https://github.com/Maxy747" target="_blank" rel="noopener">GitHub ↗</a></div>
       </article>
 
-      <article class="proj proj-item" data-tags="ai app">
+      <article class="p-max proj proj-item" data-tags="ai app">
         <div class="proj-top"><span class="kind">AI assistant</span><span class="when">Nov – Dec 2024</span></div>
         <h3>M.A.X. · Student Personal Assistant</h3>
         <p>Machine-Assisted eXecutive: a personal AI assistant for students working through PDFs and notes.</p>
@@ -506,7 +536,7 @@ footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8p
         <div class="links"><a href="https://github.com/Maxy747/MAX-SPA" target="_blank" rel="noopener">Repository ↗</a></div>
       </article>
 
-      <article class="proj proj-item" data-tags="sec">
+      <article class="p-linux proj proj-item" data-tags="sec">
         <div class="proj-top"><span class="kind">Security tooling · Elevate Labs</span><span class="when">Sep – Nov 2025</span></div>
         <h3>Linux Hardening Audit Tool</h3>
         <p>A Python tool that checks a Linux system against hardening practices and reports what needs fixing.</p>

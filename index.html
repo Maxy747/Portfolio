@@ -451,6 +451,20 @@ tbody tr:hover th { color: var(--ink); }
   @keyframes pillIn { from { opacity: 0; transform: translateX(-36px); filter: blur(6px); } to { opacity: 1; transform: none; filter: blur(0); } }
   @keyframes pillText { from { opacity: 0; letter-spacing: .25em; } to { opacity: 1; letter-spacing: normal; } }
 }
+
+/* Journey: uniform boxes, sequential reveal with arrows following */
+.path.journey { align-items: stretch; grid-auto-rows: 1fr; }
+.path.journey li { height: 100%; min-height: 3.8em; }
+.path.journey li { transition: transform .3s cubic-bezier(.2,.75,.2,1), border-color .25s, color .25s, background-color .25s, box-shadow .3s; }
+.path.journey li:hover { background: var(--panel-2); box-shadow: 0 12px 26px -18px color-mix(in srgb, var(--moon) 70%, transparent); }
+@media (prefers-reduced-motion: no-preference) {
+  .journey.seq:not(.go) li, .journey.seq:not(.go) li::before { opacity: 0; }
+  .journey.seq.go li { animation: pillIn .6s cubic-bezier(.2,.75,.2,1) backwards; animation-delay: calc(var(--i) * .11s); }
+  .journey.seq.go li::before { animation: arrowIn .4s ease backwards; animation-delay: calc(var(--i) * .11s - .05s); }
+  .journey.seq.go li:last-child { animation: pillIn .6s cubic-bezier(.2,.75,.2,1) backwards, glowOnce 1.4s ease calc(var(--i) * .11s + .5s) 1; }
+  @keyframes arrowIn { from { opacity: 0; transform: translate(-8px, -50%); } to { opacity: 1; transform: translate(0, -50%); } }
+  @keyframes glowOnce { 50% { box-shadow: 0 0 26px -4px var(--moon); } }
+}
 </style>
 </head>
 <body>
@@ -1269,6 +1283,19 @@ tbody tr:hover th { color: var(--ink); }
 <script>
 (function () {
   var row = document.querySelector('.pillars');
+  if (!row || !window.matchMedia || matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
+  Array.prototype.forEach.call(row.children, function (d, i) { d.classList.remove('rv', 'up', 'left', 'right', 'zoom', 'in'); d.style.removeProperty('--d'); d.style.setProperty('--i', i); });
+  row.classList.add('seq');
+  var io = new IntersectionObserver(function (es) {
+    es.forEach(function (e) { if (e.isIntersecting) { row.classList.add('go'); io.disconnect(); } });
+  }, { threshold: 0.35 });
+  io.observe(row);
+  setTimeout(function () { if (row.getBoundingClientRect().top < innerHeight) row.classList.add('go'); }, 3000);
+})();
+</script>
+<script>
+(function () {
+  var row = document.querySelector('.journey');
   if (!row || !window.matchMedia || matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
   Array.prototype.forEach.call(row.children, function (d, i) { d.classList.remove('rv', 'up', 'left', 'right', 'zoom', 'in'); d.style.removeProperty('--d'); d.style.setProperty('--i', i); });
   row.classList.add('seq');

@@ -499,6 +499,13 @@ tbody tr:hover th { color: var(--ink); }
   @keyframes eduIn { from { opacity: 0; transform: translateX(-44px) scale(.98); filter: blur(6px); } to { opacity: 1; transform: none; filter: blur(0); } }
   @keyframes eduPart { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
 }
+
+/* Layout guard: the page column never grows past the viewport, and the carousel track takes no layout space */
+.wrap { grid-template-columns: minmax(0, 1fr); }
+.wrap > * { min-width: 0; }
+.pk-view { contain: layout paint; }
+.pk-track { position: absolute; top: 0; left: 0; bottom: 0; }
+html, body { overflow-x: clip; }
 </style>
 </head>
 <body>

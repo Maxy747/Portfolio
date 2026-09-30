@@ -984,6 +984,23 @@ footer.site-foot { justify-content: normal; align-items: stretch; width: 100%; }
     text-align: justify; text-justify: inter-word; -webkit-hyphens: auto; hyphens: auto; hyphenate-limit-chars: 6 3 3;
   }
 }
+
+/* ---------- Wide screens: use the space, same layout ---------- */
+@media (min-width: 1280px) {
+  :root { --gut: clamp(24px, 3.2vw, 72px); --s5: clamp(1.9rem, 2.3vw, 2.6rem); --s6: clamp(3.6rem, 5vw, 6.2rem); }
+  body { padding-inline: var(--gut); }
+  nav { margin-inline: calc(-1 * var(--gut)); padding-inline: var(--gut); }
+  .wrap, .nav-in { max-width: 1680px; }
+  .wrap { gap: 96px; }
+  .hero { grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: clamp(48px, 5vw, 110px); padding-top: 80px; align-items: center; }
+  .thesis { max-width: 30ch; font-size: clamp(1.4rem, 1.7vw, 1.9rem); }
+  .lede { max-width: 66ch; }
+  .sec-intro { max-width: 72ch; }
+  .projects { gap: 20px; }
+  .lab, .lab-more, .pipes, .two { gap: 20px; }
+}
+@media (min-width: 1600px) { html { font-size: 17px; } }
+@media (min-width: 1900px) { html { font-size: 18px; } }
 </style>
 </head>
 <body>

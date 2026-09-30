@@ -251,6 +251,21 @@ footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8p
   .btn, .chip-btn, .proj { transition: border-color .15s, color .15s, background-color .15s; }
 }
 
+
+/* Journey row: one line on wide screens, a clean grid when narrow (no orphan arrows) */
+.path.journey { display: grid; grid-template-columns: repeat(9, minmax(0, 1fr)); gap: 10px 22px; }
+.path.journey li { display: flex; align-items: center; justify-content: center; text-align: center; padding: 8px 6px; line-height: 1.35; min-height: 3.2em; overflow-wrap: anywhere; }
+@media (max-width: 1060px) {
+  .path.journey { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .path.journey li:nth-child(3n+1)::before { content: none; }
+}
+@media (max-width: 520px) {
+  .path.journey { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .path.journey li:nth-child(3n+1)::before { content: "→"; }
+  .path.journey li:nth-child(2n+1)::before { content: none; }
+  .path.journey li:last-child { grid-column: 1 / -1; }
+}
+
 /* ---------- Motion & interaction ---------- */
 .spot { position: fixed; inset: 0; pointer-events: none; z-index: 0; background: radial-gradient(420px circle at var(--mx, 50%) var(--my, -20%), color-mix(in srgb, var(--moon) 9%, transparent), transparent 70%); }
 .wrap, nav { position: relative; z-index: 1; }
@@ -366,7 +381,7 @@ footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8p
       </div>
     </div>
     <p class="sec-intro">I started in application-level AI and kept following the system downward: into the backend it calls, the pipeline that ships it, the cloud it runs on, and the security that keeps it standing. Each step came from a project that needed it.</p>
-    <ol class="path" aria-label="How my work has expanded">
+    <ol class="path journey" aria-label="How my work has expanded">
       <li>AI/ML degree</li><li>GenAI apps</li><li>VR + AI</li><li>Backend &amp; APIs</li><li>DevOps</li><li>Cloud</li><li>Security</li><li>Self-hosted infra</li><li>Full-system engineering</li>
     </ol>
     <div class="pillars">

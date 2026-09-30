@@ -476,6 +476,19 @@ tbody tr:hover th { color: var(--ink); }
 .rot em { font-style: normal; color: var(--moon); }
 .rot.out { opacity: 0; transform: translateY(-14px); filter: blur(6px); }
 .rot.pre { opacity: 0; transform: translateY(14px); filter: blur(6px); transition: none; }
+
+/* Countries row: breathing wave, one box rising at a time with a glowing border */
+.abroad .path li, .abroad .path li:last-child { border-color: var(--rule); color: var(--ink-2); }
+@media (prefers-reduced-motion: no-preference) {
+  .abroad .path li { animation: breathe 3.6s ease-in-out infinite; }
+  .abroad .path li:nth-child(2) { animation-delay: 1.2s; }
+  .abroad .path li:nth-child(3) { animation-delay: 2.4s; }
+  @keyframes breathe {
+    0%, 55%, 100% { transform: translateY(0); border-color: var(--rule); color: var(--ink-2); box-shadow: none; }
+    22% { transform: translateY(-7px); border-color: var(--moon); color: var(--moon); box-shadow: 0 0 0 1px color-mix(in srgb, var(--moon) 35%, transparent), 0 0 22px -4px var(--moon), 0 14px 24px -16px var(--moon); }
+  }
+  .abroad .path:hover li { animation-play-state: paused; }
+}
 </style>
 </head>
 <body>

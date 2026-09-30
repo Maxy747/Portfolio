@@ -1900,19 +1900,6 @@ html { scrollbar-color: color-mix(in srgb, var(--moon) 55%, var(--panel)) var(--
     var h = document.documentElement.scrollHeight - innerHeight;
     prog.style.setProperty('--p', h > 0 ? Math.min(1, scrollY / h) : 0);
   }
-  var sleepT, hovering = false;
-  function wake(ms) {
-    wheel.classList.add('awake'); clearTimeout(sleepT);
-    sleepT = setTimeout(function () { if (!hovering) wheel.classList.remove('awake'); }, ms || 2200);
-  }
-  addEventListener('scroll', function () { wake(); }, { passive: true });
-  addEventListener('pointermove', function (e) {
-    if (e.pointerType === 'mouse' && e.clientX > innerWidth - 70 && Math.abs(e.clientY - innerHeight / 2) < 220) wake(1800);
-  }, { passive: true });
-  wheel.addEventListener('pointerenter', function () { hovering = true; wheel.classList.add('awake'); clearTimeout(sleepT); });
-  wheel.addEventListener('pointerleave', function () { hovering = false; wake(1200); });
-  wheel.addEventListener('focusin', function () { hovering = true; wheel.classList.add('awake'); });
-  wheel.addEventListener('focusout', function () { hovering = false; wake(1200); });
   addEventListener('scroll', onScroll, { passive: true }); onScroll();
 
   if (reduce) return;
@@ -2454,6 +2441,19 @@ html { scrollbar-color: color-mix(in srgb, var(--moon) 55%, var(--panel)) var(--
     if (e.key === 'ArrowUp') { e.preventDefault(); go(active - 1); items[Math.max(active - 1, 0)].focus(); }
   });
   addEventListener('scroll', onScroll, { passive: true });
+  var sleepT, hovering = false;
+  function wake(ms) {
+    wheel.classList.add('awake'); clearTimeout(sleepT);
+    sleepT = setTimeout(function () { if (!hovering) wheel.classList.remove('awake'); }, ms || 2200);
+  }
+  addEventListener('scroll', function () { wake(); }, { passive: true });
+  addEventListener('pointermove', function (e) {
+    if (e.pointerType === 'mouse' && e.clientX > innerWidth - 70 && Math.abs(e.clientY - innerHeight / 2) < 220) wake(1800);
+  }, { passive: true });
+  wheel.addEventListener('pointerenter', function () { hovering = true; wheel.classList.add('awake'); clearTimeout(sleepT); });
+  wheel.addEventListener('pointerleave', function () { hovering = false; wake(1200); });
+  wheel.addEventListener('focusin', function () { hovering = true; wheel.classList.add('awake'); });
+  wheel.addEventListener('focusout', function () { hovering = false; wake(1200); });
   addEventListener('resize', onScroll);
   onScroll();
 })();

@@ -438,6 +438,8 @@ tbody tr:hover th { color: var(--ink); }
 .pk-arrow { flex: none; width: 36px; height: 42px; display: grid; place-items: center; font-size: 1.2rem; line-height: 1; color: var(--ink); background: var(--panel); border: 1px solid var(--rule); cursor: pointer; transition: border-color .2s, color .2s, transform .2s; }
 .pk-arrow:hover { border-color: var(--moon); color: var(--moon); transform: translateY(-2px); }
 .pk-arrow:active { transform: scale(.92); }
+.sec-head .picker { flex: 0 1 400px; min-width: min(320px, 100%); }
+.pk-item { overflow: hidden; text-overflow: ellipsis; }
 @media (max-width: 640px) { .picker { width: 100%; } }
 @media (prefers-reduced-motion: reduce) { .pk-track, .pk-item { transition: none; } }
 </style>

@@ -489,6 +489,16 @@ tbody tr:hover th { color: var(--ink); }
   }
   .abroad .path:hover li { animation-play-state: paused; }
 }
+
+/* Education cards: one-time staggered entrance */
+@media (prefers-reduced-motion: no-preference) {
+  #education .timeline.seq:not(.go) > li { opacity: 0; }
+  #education .timeline.seq.go > li { animation: eduIn .9s cubic-bezier(.2,.75,.2,1) backwards; animation-delay: calc(var(--i) * .2s); }
+  #education .timeline.seq.go > li .meta { animation: eduPart .7s cubic-bezier(.2,.75,.2,1) backwards; animation-delay: calc(var(--i) * .2s + .2s); }
+  #education .timeline.seq.go > li h3, #education .timeline.seq.go > li ul { animation: eduPart .7s cubic-bezier(.2,.75,.2,1) backwards; animation-delay: calc(var(--i) * .2s + .32s); }
+  @keyframes eduIn { from { opacity: 0; transform: translateX(-44px) scale(.98); filter: blur(6px); } to { opacity: 1; transform: none; filter: blur(0); } }
+  @keyframes eduPart { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+}
 </style>
 </head>
 <body>
@@ -788,7 +798,7 @@ tbody tr:hover th { color: var(--ink); }
   <section id="education" aria-labelledby="edu-h">
     <div class="sec-head">
       <div>
-        <span class="label">Education</span>
+        <span class="label">Background</span>
         <h2 id="edu-h">Education</h2>
       </div>
     </div>
@@ -1361,6 +1371,23 @@ tbody tr:hover th { color: var(--ink); }
       void el.offsetWidth; el.classList.remove('pre');
     }, 450);
   }, 3200);
+})();
+</script>
+<script>
+(function () {
+  var list = document.querySelector('#education .timeline');
+  if (!list || !window.matchMedia || matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
+  var cards = Array.prototype.slice.call(list.children);
+  cards.forEach(function (c, i) {
+    c.classList.remove('reveal', 'in'); c.style.removeProperty('--d'); c.style.setProperty('--i', i);
+    c.querySelectorAll('.rv').forEach(function (x) { x.classList.remove('rv', 'up', 'left', 'right', 'zoom', 'in'); x.style.removeProperty('--d'); });
+  });
+  list.classList.add('seq');
+  var io = new IntersectionObserver(function (es) {
+    if (es[0].isIntersecting) { list.classList.add('go'); io.disconnect(); }
+  }, { threshold: 0.2 });
+  io.observe(list);
+  setTimeout(function () { if (list.getBoundingClientRect().top < innerHeight) list.classList.add('go'); }, 3000);
 })();
 </script>
 </body>

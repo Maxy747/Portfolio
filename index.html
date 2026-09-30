@@ -946,6 +946,10 @@ footer.site-foot { justify-content: normal; align-items: stretch; width: 100%; }
 .th-namma .when { color: #6e5a52; }
 .th-namma .gal-view { background: #cbb5a8; }
 .trio-row .gal-zoom img { background: #d8c5b9; }
+
+/* Footer: availability on the right, above the links */
+.foot-right { display: grid; justify-items: end; gap: 10px; }
+@media (max-width: 640px) { .foot-right { justify-items: start; } }
 </style>
 </head>
 <body>
@@ -1541,11 +1545,13 @@ footer.site-foot { justify-content: normal; align-items: stretch; width: 100%; }
       <div class="foot-brand">
         <a class="brand" href="#top">M.A.<b>X</b></a>
         <span>Mazin Abdul Azeez · AI/ML Engineer</span>
-        <span class="foot-avail"><span class="dot"></span>Open to opportunities</span>
       </div>
-      <nav class="foot-links" aria-label="Footer">
+      <div class="foot-right">
+        <span class="foot-avail"><span class="dot"></span>Open to opportunities</span>
+        <nav class="foot-links" aria-label="Footer">
         <a href="#work">Projects</a><a href="#lab">Infra lab</a><a href="#experience">Experience</a><a href="#education">Education</a><a href="#contact">Contact</a>
       </nav>
+      </div>
     </div>
     <div class="foot-bottom">
       <span>© 2026 Mazin Abdul Azeez</span>

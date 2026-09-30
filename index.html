@@ -514,6 +514,27 @@ h1 .word { display: inline-block; white-space: nowrap; }
 .svc-row { align-content: center; align-items: center; row-gap: 6px; }
 .svc-row .tag { grid-column: auto; justify-self: end; font-family: var(--mono); font-size: .7rem; color: var(--moon); padding: 3px 8px; border: 1px solid color-mix(in srgb, var(--moon) 40%, var(--rule)); background: color-mix(in srgb, var(--moon) 8%, transparent); }
 .svc-row b { font-size: .95rem; }
+
+/* Card links as real buttons, pinned to the bottom of each card */
+.projects > .proj { display: flex; flex-direction: column; gap: 12px; }
+.projects > .proj > .links { margin-top: auto; padding-top: 6px; }
+.feature .body > .links { margin-top: 4px; }
+.proj-item .links, .job .links { gap: 10px; }
+.proj-item .links a, .job .links a {
+  --bc: var(--pc, var(--moon));
+  display: inline-flex; align-items: center; gap: 8px; padding: 9px 14px;
+  font-family: var(--mono); font-size: var(--s1); letter-spacing: .06em; text-transform: uppercase;
+  color: var(--bc); background: transparent; border: 1px solid color-mix(in srgb, var(--bc) 55%, var(--rule));
+  text-decoration: none; background-image: none;
+  transition: transform .2s cubic-bezier(.2,.75,.2,1), background-color .2s, color .2s, border-color .2s, box-shadow .25s;
+}
+.proj-item .links a:first-child, .job .links a:first-child { background: var(--bc); border-color: var(--bc); color: var(--bg); }
+.proj-item .links a:hover, .job .links a:hover { transform: translateY(-2px); border-color: var(--bc); box-shadow: 0 10px 22px -12px var(--bc); background-size: auto; }
+.proj-item .links a:not(:first-child):hover, .job .links a:not(:first-child):hover { background: color-mix(in srgb, var(--bc) 12%, transparent); }
+.proj-item .links a:first-child:hover, .job .links a:first-child:hover { filter: brightness(1.08); }
+.proj-item .links a:active, .job .links a:active { transform: scale(.97); }
+.job .links { margin-top: 12px; }
+@media (max-width: 420px) { .proj-item .links a, .job .links a { flex: 1 1 auto; justify-content: center; } }
 </style>
 </head>
 <body>

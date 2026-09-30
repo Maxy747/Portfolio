@@ -923,6 +923,18 @@ footer.site-foot { justify-content: normal; align-items: stretch; width: 100%; }
   .ns-ring i { animation: ringFill 1.6s cubic-bezier(.2,.75,.2,1) both; }
   @keyframes ringFill { from { transform: rotate(-180deg); opacity: .2; } }
 }
+
+/* NammaShaale toned down: deeper beige, darker brown edge, softer tiles */
+.th-namma { --panel-2: #e6d3c9; --rule: rgba(90,45,25,.22);
+  background: radial-gradient(90% 60% at 100% 0%, rgba(214,160,132,.35) 0%, transparent 60%), linear-gradient(180deg, #e9dbd3 0%, #dfcdc3 100%) !important;
+  border-color: #6b3822 !important; border-top-color: #8b4a2f !important; }
+.th-namma .pts li { background: #dcc7bc; }
+.th-namma .stack li { background: #d6bfb2; }
+.ns-tile.t1 { background: #e8c2af; } .ns-tile.t2 { background: #e3d08e; } .ns-tile.t3 { background: #e6bcc0; }
+.ns-ring, .ns-qr { background: #f1e6e0; border-color: rgba(90,45,25,.2); }
+.th-namma .links a:not(:first-child), .th-namma .flip-btn { background: rgba(139,74,47,.08); }
+.th-namma .gal-view { background: #dccabf; }
+.trio-row .gal-zoom img { background: #e9dbd3; }
 </style>
 </head>
 <body>

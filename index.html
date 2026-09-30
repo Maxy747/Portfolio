@@ -465,6 +465,17 @@ tbody tr:hover th { color: var(--ink); }
   @keyframes arrowIn { from { opacity: 0; transform: translate(-8px, -50%); } to { opacity: 1; transform: translate(0, -50%); } }
   @keyframes glowOnce { 50% { box-shadow: 0 0 26px -4px var(--moon); } }
 }
+
+.picker-row { display: flex; justify-content: center; margin-block: -4px 4px; }
+.picker-row .picker { width: min(480px, 100%); }
+.picker-row .pk-view { height: 44px; }
+
+/* Contact headline rotator */
+.contact h2 { min-height: 2.35em; }
+.rot { display: inline-block; transition: opacity .45s cubic-bezier(.2,.75,.2,1), transform .45s cubic-bezier(.2,.75,.2,1), filter .45s; }
+.rot em { font-style: normal; color: var(--moon); }
+.rot.out { opacity: 0; transform: translateY(-14px); filter: blur(6px); }
+.rot.pre { opacity: 0; transform: translateY(14px); filter: blur(6px); transition: none; }
 </style>
 </head>
 <body>
@@ -540,14 +551,9 @@ tbody tr:hover th { color: var(--ink); }
     <div class="sec-head">
       <div>
         <span class="label">Work</span>
-        <h2 id="work-h">Selected projects</h2>
+        <h2 id="work-h">Projects</h2>
       </div>
-      <div class="picker" id="picker" role="group" aria-label="Filter projects by area">
-        <button class="pk-arrow" id="pk-prev" type="button" aria-label="Previous area">‹</button>
-        <div class="pk-view" id="pk-view" tabindex="0" aria-describedby="pk-live"><div class="pk-track" id="pk-track"></div></div>
-        <button class="pk-arrow" id="pk-next" type="button" aria-label="Next area">›</button>
-        <span class="sr-only" id="pk-live" aria-live="polite"></span>
-      </div>
+      
       <div class="filters" hidden>
         <button class="chip-btn" id="f-all" data-f="all" aria-pressed="true">All</button>
         <button class="chip-btn" id="f-ai" data-f="ai" aria-pressed="false">AI/ML</button>
@@ -555,6 +561,13 @@ tbody tr:hover th { color: var(--ink); }
         <button class="chip-btn" id="f-sec" data-f="sec" aria-pressed="false">Security</button>
         <button class="chip-btn" id="f-app" data-f="app" aria-pressed="false">Apps</button>
         <button class="chip-btn" id="f-hw" data-f="hw" aria-pressed="false">Hardware</button>
+      </div>
+    </div>
+
+    <div class="picker-row">
+      <div class="picker" id="picker" role="group" aria-label="Filter projects by area">
+        <div class="pk-view" id="pk-view" tabindex="0" aria-describedby="pk-live"><div class="pk-track" id="pk-track"></div></div>
+        <span class="sr-only" id="pk-live" aria-live="polite"></span>
       </div>
     </div>
 
@@ -850,7 +863,7 @@ tbody tr:hover th { color: var(--ink); }
   <section id="contact" class="contact" aria-labelledby="contact-h">
     <div style="display:grid;gap:14px;align-content:start">
       <span class="label">Contact</span>
-      <h2 id="contact-h">Let's build something that runs.</h2>
+      <h2 id="contact-h" aria-label="Let's build something that runs."><span class="rot" id="rot" aria-hidden="true">Let's build something that <em>runs</em>.</span></h2>
       <p class="sec-intro">Open to full-time roles in AI/ML, DevOps, Cloud, SRE, Platform, Security/SOC, and Backend, in the UAE and internationally. Also open to freelance work on deployments, automation, and AI integrations.</p>
     </div>
     <div class="contact-rows">
@@ -1230,8 +1243,8 @@ tbody tr:hover th { color: var(--ink); }
   }
   track.addEventListener('transitionend', function (e) { if (e.target === track && e.propertyName === 'transform') normalize(); });
 
-  document.getElementById('pk-prev').addEventListener('click', function () { go(-1); });
-  document.getElementById('pk-next').addEventListener('click', function () { go(1); });
+  var pkprev = document.getElementById('pk-prev'); if (pkprev) pkprev.addEventListener('click', function () { go(-1); });
+  var pknext = document.getElementById('pk-next'); if (pknext) pknext.addEventListener('click', function () { go(1); });
   view.addEventListener('keydown', function (e) {
     if (e.key === 'ArrowLeft') { e.preventDefault(); go(-1); }
     else if (e.key === 'ArrowRight') { e.preventDefault(); go(1); }
@@ -1304,6 +1317,37 @@ tbody tr:hover th { color: var(--ink); }
   }, { threshold: 0.35 });
   io.observe(row);
   setTimeout(function () { if (row.getBoundingClientRect().top < innerHeight) row.classList.add('go'); }, 3000);
+})();
+</script>
+<script>
+(function () {
+  var el = document.getElementById('rot');
+  if (!el || !window.matchMedia || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var lines = [
+    ["Let's build something that ", "runs", "."],
+    ["Let's ship it to ", "production", "."],
+    ["Let's ", "automate", " the boring parts."],
+    ["Let's make the AI ", "actually useful", "."],
+    ["Let's ", "lock it down", " before launch."],
+    ["Let's deploy it, then ", "watch it", " run."]
+  ];
+  var i = 0, visible = true;
+  function render(l) {
+    el.textContent = '';
+    el.appendChild(document.createTextNode(l[0]));
+    var em = document.createElement('em'); em.textContent = l[1]; el.appendChild(em);
+    el.appendChild(document.createTextNode(l[2]));
+  }
+  if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { visible = es[0].isIntersecting; }).observe(el);
+  setInterval(function () {
+    if (!visible || document.hidden) return;
+    el.classList.add('out');
+    setTimeout(function () {
+      i = (i + 1) % lines.length; render(lines[i]);
+      el.classList.remove('out'); el.classList.add('pre');
+      void el.offsetWidth; el.classList.remove('pre');
+    }, 450);
+  }, 3200);
 })();
 </script>
 </body>

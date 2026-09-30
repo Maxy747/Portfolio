@@ -604,6 +604,13 @@ h1 .word { display: inline-block; white-space: nowrap; }
   .flowline li { min-height: 0; }
   .flowline li + li::before { content: "↓"; left: 50%; top: -17px; transform: translateX(-50%); }
 }
+
+/* Dosimeter card fills the full height of the services list */
+.lab-notes { align-content: stretch; grid-template-rows: minmax(0, 1fr); }
+.lab-notes > .proj { height: 100%; display: flex; flex-direction: column; gap: 12px; }
+.lab-notes > .proj .flow { flex: 1; display: flex; flex-direction: column; margin-top: 6px; }
+.lab-notes > .proj .flow li { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+.flow li:first-child::after { display: none; }
 </style>
 </head>
 <body>

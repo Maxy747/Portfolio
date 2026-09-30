@@ -595,6 +595,15 @@ h1 .word { display: inline-block; white-space: nowrap; }
   .lab-more.seq.go > *, .pipes.seq.go > * { animation: pillIn .75s cubic-bezier(.2,.75,.2,1) backwards; animation-delay: calc(var(--i) * .16s); }
 }
 @media (prefers-reduced-motion: reduce) { .s-on { opacity: 1; } .s-off { opacity: 0; } }
+
+/* Pipelines: one row of equal boxes; vertical with down arrows on narrow screens */
+.flowline { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 22px; align-items: stretch; }
+.flowline li { display: flex; align-items: center; justify-content: center; text-align: center; padding: 8px 6px; line-height: 1.35; min-height: 3.4em; overflow-wrap: anywhere; }
+@media (max-width: 1060px) and (min-width: 881px), (max-width: 520px) {
+  .flowline { grid-auto-flow: row; grid-auto-columns: auto; gap: 18px; }
+  .flowline li { min-height: 0; }
+  .flowline li + li::before { content: "↓"; left: 50%; top: -17px; transform: translateX(-50%); }
+}
 </style>
 </head>
 <body>

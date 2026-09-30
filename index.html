@@ -1194,6 +1194,19 @@ html { scrollbar-color: color-mix(in srgb, var(--moon) 55%, var(--panel)) var(--
   .sw-item { height: 18px !important; }
 }
 @media (prefers-reduced-motion: reduce) { .secwheel { transition: none; } }
+
+/* Dial ticks: draw the line (and its glow) on a pseudo-element, not the padded hit box */
+.sw-tick { --pl: 6px; position: relative; background: none !important; box-shadow: none !important; }
+.sw-tick::before { content: ""; position: absolute; right: 0; top: 50%; width: calc(100% - var(--pl)); height: 2px; transform: translateY(-50%); border-radius: 2px;
+  background: currentColor; transition: box-shadow .3s, height .3s; }
+.sw-item.on .sw-tick::before { height: 2px; box-shadow: 0 0 6px 0 color-mix(in srgb, var(--moon) 80%, transparent), 0 0 14px 0 color-mix(in srgb, var(--moon) 45%, transparent); }
+.sw-item.on .sw-label { text-shadow: 0 0 10px color-mix(in srgb, var(--moon) 55%, transparent), 0 0 2px var(--bg); }
+@media (max-width: 1199px) { .sw-tick { --pl: 4px; } }
+/* touch screens: only the current heading, never all at once */
+@media (hover: none) {
+  .secwheel:hover .sw-label { opacity: 0; transform: translateX(10px); }
+  .secwheel .sw-item.on .sw-label, .secwheel.pop .sw-item.on .sw-label { opacity: 1; transform: none; }
+}
 </style>
 </head>
 <body>

@@ -977,6 +977,13 @@ footer.site-foot { justify-content: normal; align-items: stretch; width: 100%; }
   .bm-dot { animation: bmPulse 2.4s ease-in-out infinite; transform-origin: 51.5px 12.5px; }
   @keyframes bmPulse { 50% { transform: scale(.8); opacity: .7; } }
 }
+
+/* Mobile: justified body text, hyphenated to avoid wide gaps */
+@media (max-width: 640px) {
+  .face p, .pts li > span, .job li, .sec-intro, .lede, .svc-row span:not(.tag), .burst li > span:not(.bn), .api-note, .contact .sec-intro {
+    text-align: justify; text-justify: inter-word; -webkit-hyphens: auto; hyphens: auto; hyphenate-limit-chars: 6 3 3;
+  }
+}
 </style>
 </head>
 <body>

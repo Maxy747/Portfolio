@@ -1207,6 +1207,17 @@ html { scrollbar-color: color-mix(in srgb, var(--moon) 55%, var(--panel)) var(--
   .secwheel:hover .sw-label { opacity: 0; transform: translateX(10px); }
   .secwheel .sw-item.on .sw-label, .secwheel.pop .sw-item.on .sw-label { opacity: 1; transform: none; }
 }
+
+/* Send-a-message button glows */
+.msg-open { box-shadow: 0 0 0 1px color-mix(in srgb, var(--moon) 45%, transparent) inset, 0 0 22px -6px var(--moon); }
+@media (prefers-reduced-motion: no-preference) {
+  .msg-open { animation: msgGlow 2.6s ease-in-out infinite; }
+  .msg-open[aria-expanded="true"] { animation: none; }
+  @keyframes msgGlow { 0%, 100% { box-shadow: 0 0 0 1px color-mix(in srgb, var(--moon) 45%, transparent) inset, 0 0 16px -6px var(--moon); }
+    50% { box-shadow: 0 0 0 1px var(--moon) inset, 0 0 34px -2px var(--moon); } }
+  .msg-open.ping { animation: msgPing .9s ease-out 1; }
+  @keyframes msgPing { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--moon) 70%, transparent); } 100% { box-shadow: 0 0 0 18px transparent; } }
+}
 </style>
 </head>
 <body>
@@ -2469,6 +2480,51 @@ html { scrollbar-color: color-mix(in srgb, var(--moon) 55%, var(--panel)) var(--
   wheel.addEventListener('focusout', function () { hovering = false; wake(1200); });
   addEventListener('resize', onScroll);
   onScroll();
+})();
+</script>
+<script>
+(function () {
+  var btn = document.getElementById('msg-open'), panel = document.getElementById('msg-panel');
+  if (!btn || !panel) return;
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function openSmooth() {
+    if (!panel.hidden) { document.getElementById('m-name').focus({ preventScroll: true }); return; }
+    btn.click();                                   // existing handler reveals the form
+    if (reduce) return;
+    var h = panel.scrollHeight;
+    panel.style.overflow = 'hidden'; panel.style.maxHeight = '0px'; panel.style.opacity = '0';
+    void panel.offsetHeight;
+    panel.style.transition = 'max-height .7s cubic-bezier(.2,.75,.2,1), opacity .5s ease .1s';
+    panel.style.maxHeight = h + 'px'; panel.style.opacity = '1';
+    setTimeout(function () { panel.style.overflow = ''; panel.style.maxHeight = ''; panel.style.transition = ''; panel.style.opacity = ''; }, 760);
+  }
+
+  function goToMessage() {
+    var y = btn.getBoundingClientRect().top + scrollY - Math.min(160, innerHeight * .22);
+    window.scrollTo({ top: Math.max(0, y), behavior: reduce ? 'auto' : 'smooth' });
+    // wait for the scroll to settle, then open
+    var last = -1, still = 0, t0 = Date.now();
+    (function wait() {
+      if (Math.abs(scrollY - last) < 1) still++; else still = 0;
+      last = scrollY;
+      if (still >= 3 || Date.now() - t0 > 2400) {
+        btn.classList.remove('ping'); void btn.offsetWidth; btn.classList.add('ping');
+        setTimeout(openSmooth, reduce ? 0 : 180);
+        return;
+      }
+      setTimeout(wait, 60);
+    })();
+  }
+
+  document.querySelectorAll('a[href="#contact"]').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      e.preventDefault();
+      if (history.replaceState) history.replaceState(null, '', '#contact');
+      goToMessage();
+    });
+  });
+  if (location.hash === '#message') setTimeout(goToMessage, 400);
 })();
 </script>
 </body>

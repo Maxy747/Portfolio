@@ -506,6 +506,8 @@ tbody tr:hover th { color: var(--ink); }
 .pk-view { contain: layout paint; }
 .pk-track { position: absolute; top: 0; left: 0; bottom: 0; }
 html, body { overflow-x: clip; }
+
+h1 .word { display: inline-block; white-space: nowrap; }
 </style>
 </head>
 <body>
@@ -1140,10 +1142,15 @@ html, body { overflow-x: clip; }
   if (h1 && h1.firstChild && h1.firstChild.nodeType === 3) {
     var name = h1.firstChild.textContent, frag = document.createDocumentFragment();
     h1.setAttribute('aria-label', h1.textContent.replace(/\s+/g, ' ').trim());
-    name.split('').forEach(function (c, i) {
-      var s = document.createElement('span');
-      s.className = 'ch' + (c === ' ' ? ' sp' : ''); s.textContent = c === ' ' ? ' ' : c;
-      s.style.setProperty('--i', i); s.setAttribute('aria-hidden', 'true'); frag.appendChild(s);
+    var n = 0;
+    name.trim().split(/\s+/).forEach(function (word, w) {
+      if (w) { frag.appendChild(document.createTextNode(' ')); n++; }
+      var wrap = document.createElement('span'); wrap.className = 'word'; wrap.setAttribute('aria-hidden', 'true');
+      word.split('').forEach(function (c) {
+        var s = document.createElement('span'); s.className = 'ch'; s.textContent = c;
+        s.style.setProperty('--i', n++); wrap.appendChild(s);
+      });
+      frag.appendChild(wrap);
     });
     h1.replaceChild(frag, h1.firstChild);
   }

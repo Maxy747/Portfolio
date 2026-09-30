@@ -1161,6 +1161,13 @@ html { scrollbar-color: color-mix(in srgb, var(--moon) 55%, var(--panel)) var(--
   .sw-count { font-size: .72rem; margin-top: 10px; }
   .sw-next { font-size: .72rem; }
 }
+
+/* Flip: hide the side facing away at the halfway point (animated children can escape backface culling) */
+.flip-inner > .face { transition: border-color .25s, box-shadow .3s, visibility 0s linear .42s; }
+.proj-item.flipped .flip-inner > .front { visibility: hidden; }
+.proj-item:not(.flipped) .flip-inner > .back { visibility: hidden; }
+.proj-item.flipped .front * { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) { .flip-inner > .face { transition: none; } }
 </style>
 </head>
 <body>

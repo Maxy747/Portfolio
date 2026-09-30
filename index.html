@@ -631,6 +631,11 @@ footer.site-foot { display: grid; gap: 20px; border-top: 1px solid var(--rule); 
 .foot-social a:hover { transform: translateY(-3px); border-color: var(--moon); color: var(--moon); box-shadow: 0 10px 22px -12px var(--moon); }
 .foot-bottom { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 20px; padding-top: 16px; border-top: 1px dashed var(--rule); font-family: var(--mono); font-size: var(--s1); color: var(--ink-2); }
 @media (max-width: 640px) { .foot-top { flex-direction: column; align-items: flex-start; } }
+
+/* A lone card on the last row sits centred */
+@media (min-width: 641px) {
+  .projects > .proj.solo { grid-column: 1 / -1; justify-self: center; width: calc(50% - 8px); }
+}
 </style>
 </head>
 <body>
@@ -1610,6 +1615,19 @@ footer.site-foot { display: grid; gap: 20px; border-top: 1px solid var(--rule); 
     io.observe(row);
     setTimeout(function () { if (row.getBoundingClientRect().top < innerHeight) row.classList.add('go'); }, 3000);
   });
+})();
+</script>
+<script>
+(function () {
+  var grid = document.getElementById('projects-grid');
+  if (!grid) return;
+  function mark() {
+    var shown = Array.prototype.filter.call(grid.querySelectorAll(':scope > .proj-item'), function (c) { return !c.hidden; });
+    grid.querySelectorAll('.solo').forEach(function (c) { c.classList.remove('solo'); });
+    if (shown.length % 2 === 1) shown[shown.length - 1].classList.add('solo');
+  }
+  document.querySelectorAll('.filters .chip-btn').forEach(function (b) { b.addEventListener('click', mark); });
+  mark();
 })();
 </script>
 </body>

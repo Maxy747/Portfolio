@@ -1357,7 +1357,7 @@ h1 .word { display: inline-block; white-space: nowrap; }
       if (!e.isIntersecting) return;
       var el = e.target; el.classList.add('in'); io.unobserve(el);
       /* once revealed, drop the reveal classes so hover lifts respond instantly */
-      if (el.classList.contains('rv')) setTimeout(function () { el.classList.remove('rv', 'up', 'left', 'right', 'zoom', 'in'); el.style.removeProperty('--d'); }, 1300);
+      if (el.classList.contains('rv')) setTimeout(function () { el.classList.remove('rv', 'up', 'left', 'right', 'zoom'); if (!el.classList.contains('reveal')) el.classList.remove('in'); el.style.removeProperty('--d'); }, 1300);
       if (el.matches('.sec-head')) { var h = el.querySelector('h2'); if (h) decode(h); var l = el.querySelector('.label'); if (l) setTimeout(function () { decode(l); }, 150); }
       if (el.matches('h2.small')) decode(el);
     });
@@ -1379,7 +1379,7 @@ h1 .word { display: inline-block; white-space: nowrap; }
   });
   setTimeout(function () {
     document.querySelectorAll('.rv:not(.in)').forEach(function (el) {
-      if (el.getBoundingClientRect().top < innerHeight) { el.classList.add('in'); io.unobserve(el); setTimeout(function () { el.classList.remove('rv', 'up', 'left', 'right', 'zoom', 'in'); }, 1300); }
+      if (el.getBoundingClientRect().top < innerHeight) { el.classList.add('in'); io.unobserve(el); setTimeout(function () { el.classList.remove('rv', 'up', 'left', 'right', 'zoom'); if (!el.classList.contains('reveal')) el.classList.remove('in'); }, 1300); }
     });
   }, 2500);
 
@@ -1494,7 +1494,7 @@ h1 .word { display: inline-block; white-space: nowrap; }
 (function () {
   var row = document.querySelector('.pillars');
   if (!row || !window.matchMedia || matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
-  Array.prototype.forEach.call(row.children, function (d, i) { d.classList.remove('rv', 'up', 'left', 'right', 'zoom', 'in'); d.style.removeProperty('--d'); d.style.setProperty('--i', i); });
+  Array.prototype.forEach.call(row.children, function (d, i) { d.classList.remove('rv', 'up', 'left', 'right', 'zoom'); if (!d.classList.contains('reveal')) d.classList.remove('in'); d.style.removeProperty('--d'); d.style.setProperty('--i', i); });
   row.classList.add('seq');
   var io = new IntersectionObserver(function (es) {
     es.forEach(function (e) { if (e.isIntersecting) { row.classList.add('go'); io.disconnect(); } });
@@ -1507,7 +1507,7 @@ h1 .word { display: inline-block; white-space: nowrap; }
 (function () {
   var row = document.querySelector('.journey');
   if (!row || !window.matchMedia || matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
-  Array.prototype.forEach.call(row.children, function (d, i) { d.classList.remove('rv', 'up', 'left', 'right', 'zoom', 'in'); d.style.removeProperty('--d'); d.style.setProperty('--i', i); });
+  Array.prototype.forEach.call(row.children, function (d, i) { d.classList.remove('rv', 'up', 'left', 'right', 'zoom'); if (!d.classList.contains('reveal')) d.classList.remove('in'); d.style.removeProperty('--d'); d.style.setProperty('--i', i); });
   row.classList.add('seq');
   var io = new IntersectionObserver(function (es) {
     es.forEach(function (e) { if (e.isIntersecting) { row.classList.add('go'); io.disconnect(); } });
@@ -1554,7 +1554,7 @@ h1 .word { display: inline-block; white-space: nowrap; }
   var cards = Array.prototype.slice.call(list.children);
   cards.forEach(function (c, i) {
     c.classList.remove('reveal', 'in'); c.style.removeProperty('--d'); c.style.setProperty('--i', i);
-    c.querySelectorAll('.rv').forEach(function (x) { x.classList.remove('rv', 'up', 'left', 'right', 'zoom', 'in'); x.style.removeProperty('--d'); });
+    c.querySelectorAll('.rv').forEach(function (x) { x.classList.remove('rv', 'up', 'left', 'right', 'zoom'); if (!x.classList.contains('reveal')) x.classList.remove('in'); x.style.removeProperty('--d'); });
   });
   list.classList.add('seq');
   var io = new IntersectionObserver(function (es) {
@@ -1570,7 +1570,7 @@ h1 .word { display: inline-block; white-space: nowrap; }
   document.querySelectorAll('.lab-more, .pipes').forEach(function (row) {
     Array.prototype.forEach.call(row.children, function (c, i) {
       c.style.setProperty('--i', i);
-      c.querySelectorAll('.rv').forEach(function (x) { x.classList.remove('rv', 'up', 'left', 'right', 'zoom', 'in'); x.style.removeProperty('--d'); });
+      c.querySelectorAll('.rv').forEach(function (x) { x.classList.remove('rv', 'up', 'left', 'right', 'zoom'); if (!x.classList.contains('reveal')) x.classList.remove('in'); x.style.removeProperty('--d'); });
     });
     row.classList.add('seq');
     var io = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { row.classList.add('go'); io.disconnect(); } }, { threshold: 0.2 });

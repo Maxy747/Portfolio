@@ -1001,6 +1001,12 @@ footer.site-foot { justify-content: normal; align-items: stretch; width: 100%; }
 }
 @media (min-width: 1600px) { html { font-size: 17px; } }
 @media (min-width: 1900px) { html { font-size: 18px; } }
+
+/* Name on one line on desktop */
+@media (min-width: 900px) {
+  h1 { white-space: nowrap; font-size: clamp(2.6rem, 4.5vw, 6rem); }
+  h1 .role { white-space: normal; }
+}
 </style>
 </head>
 <body>

@@ -357,6 +357,89 @@ footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8p
 /* The infra lab is NILAVUS, so it takes PS2 blue */
 #lab { --moon: var(--c-nilavus); }
 #lab .proj { border-top: 2px solid var(--c-nilavus); }
+
+/* ---------- Motion pass 2: lift, scroll-in everything, text effects ---------- */
+.nav-links a, .links a, .crow a.v, .job .links a { text-decoration: none; background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat; transition: background-size .3s ease, color .2s; padding-bottom: 2px; }
+.nav-links a:hover, .links a:hover, .crow a.v:hover { background-size: 100% 1px; }
+h2 { position: relative; }
+.sec-head h2::after, h2.small::after { content: ""; display: block; height: 2px; width: 0; margin-top: 10px; background: var(--moon); transition: width .7s cubic-bezier(.2,.7,.2,1); }
+.sec-head.in h2::after, h2.small.in::after, .sec-head h2:hover::after, h2.small:hover::after { width: 3rem; }
+.contact h2::after { display: none; }
+tbody tr { transition: background-color .2s; }
+tbody tr:hover { background: var(--panel-2); }
+tbody tr:hover th { color: var(--ink); }
+.console dd { transition: color .2s, transform .2s; }
+.console dl div:hover dd { color: var(--moon); transform: translateX(-4px); }
+.console dl div:hover dt { color: var(--ink); }
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Name: letters rise in, then react to the cursor */
+  h1 .ch { display: inline-block; animation: charIn .8s cubic-bezier(.2,.7,.2,1) backwards; animation-delay: calc(.08s + var(--i) * .035s); transition: transform .25s cubic-bezier(.2,.7,.2,1), color .2s; }
+  h1 .ch.sp { width: .26em; }
+  h1 .ch:hover { transform: translateY(-.1em) scale(1.06); color: var(--moon); }
+  @keyframes charIn { from { opacity: 0; transform: translateY(.55em) rotate(8deg); filter: blur(8px); } to { opacity: 1; transform: none; filter: blur(0); } }
+
+  /* Role line: moving shimmer */
+  h1 .role { background: linear-gradient(90deg, var(--moon) 0%, var(--ink) 45%, var(--moon) 90%); background-size: 220% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: shimmer 5s linear infinite, rise .7s .6s cubic-bezier(.2,.7,.2,1) backwards; }
+  @keyframes shimmer { to { background-position: -220% 0; } }
+
+  /* Thesis: word by word */
+  .thesis .w { display: inline-block; animation: wordIn .6s cubic-bezier(.2,.7,.2,1) backwards; animation-delay: calc(.55s + var(--i) * .05s); }
+  @keyframes wordIn { from { opacity: 0; transform: translateY(10px); filter: blur(4px); } to { opacity: 1; transform: none; filter: blur(0); } }
+
+  /* Everything lifts on hover */
+  .console, .crow, .svc, .table-wrap, .list, .ready, .contact, .lab-notes > .proj, .abroad .path li, .field input, .field textarea, .field select { transition: transform .3s cubic-bezier(.2,.7,.2,1), box-shadow .3s, border-color .2s, background-color .2s; }
+  .svc:hover, .table-wrap:hover, .list:hover, .contact:hover, .ready:hover { transform: translateY(-4px); box-shadow: 0 22px 44px -26px color-mix(in srgb, var(--moon) 50%, transparent); }
+  .crow:hover { transform: translateY(-3px) translateX(4px); box-shadow: 0 12px 26px -18px color-mix(in srgb, var(--moon) 60%, transparent); }
+  .field input:hover, .field textarea:hover, .field select:hover { transform: translateY(-2px); border-color: color-mix(in srgb, var(--moon) 50%, var(--rule)); }
+  .list li:hover { transform: translateY(-2px); }
+  .list li { transition: padding-left .25s, transform .25s; }
+  .list li:hover span:first-child { color: var(--moon); }
+  .svc-row:hover b { color: var(--moon); letter-spacing: .02em; }
+  .svc-row b { transition: color .2s, letter-spacing .3s; }
+  .pts li { transition: transform .25s; }
+  .pts li:hover { transform: translateX(4px); }
+  .job li { transition: color .2s, transform .25s; }
+  .job li:hover { color: var(--ink); transform: translateX(4px); }
+  .btn:hover { box-shadow: 0 10px 24px -14px color-mix(in srgb, var(--moon) 70%, transparent); }
+
+  /* Project titles shimmer in their own colour; label flickers */
+  .proj-item:hover h3 { background: linear-gradient(90deg, var(--pc) 0%, var(--ink) 50%, var(--pc) 100%); background-size: 200% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: shimmer 2.4s linear infinite; }
+  .proj-item:hover .kind { animation: flicker .5s steps(2, end) 1; }
+  @keyframes flicker { 0%, 40%, 80% { opacity: 1; } 20%, 60% { opacity: .35; } }
+
+  /* Scroll-in variants for fine-grained items */
+  .rv { opacity: 0; transition: opacity .65s cubic-bezier(.2,.7,.2,1), transform .65s cubic-bezier(.2,.7,.2,1), filter .65s; transition-delay: var(--d, 0s); }
+  .rv.up { transform: translateY(22px); }
+  .rv.left { transform: translateX(-26px); }
+  .rv.right { transform: translateX(26px); }
+  .rv.zoom { transform: scale(.92); filter: blur(4px); }
+  .rv.in { opacity: 1; transform: none; filter: none; }
+  .sec-head .label { transition: letter-spacing .9s cubic-bezier(.2,.7,.2,1), opacity .6s; }
+  .sec-head.reveal:not(.in) .label { letter-spacing: .45em; opacity: 0; }
+
+  /* Click feedback */
+  .squish { animation: squish .35s cubic-bezier(.2,.7,.2,1); }
+  @keyframes squish { 40% { scale: .97; } 100% { scale: 1; } }
+}
+
+/* ---------- Filter carousel: active option centred, half of each neighbour visible, loops forever ---------- */
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.picker { display: flex; align-items: center; gap: 6px; width: min(400px, 100%); position: relative; }
+.pk-view { position: relative; flex: 1; min-width: 0; height: 42px; overflow: hidden; outline: none; cursor: grab; touch-action: pan-y; user-select: none;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 24%, #000 76%, transparent 100%); mask-image: linear-gradient(90deg, transparent 0, #000 24%, #000 76%, transparent 100%); }
+.pk-view.dragging { cursor: grabbing; }
+.picker:focus-within .pk-view { box-shadow: inset 0 -2px 0 var(--moon); }
+.pk-track { display: flex; height: 100%; will-change: transform; transition: transform .5s cubic-bezier(.22,.8,.24,1); }
+.pk-item { flex: none; height: 100%; padding: 0 8px; font-family: var(--mono); font-size: var(--s1); letter-spacing: .02em; white-space: nowrap; color: var(--ink-2); background: transparent; border: 1px solid transparent; cursor: pointer; transform: scale(.8); opacity: .4; transition: transform .5s cubic-bezier(.22,.8,.24,1), opacity .5s, color .3s, background-color .3s, border-color .3s; }
+.pk-item.near { opacity: .75; }
+.pk-item.near:hover { color: var(--ink); }
+.pk-item.on { transform: scale(1); opacity: 1; color: var(--moon); background: var(--moon-soft); border-color: var(--moon); box-shadow: 0 0 22px -8px var(--moon); }
+.pk-arrow { flex: none; width: 36px; height: 42px; display: grid; place-items: center; font-size: 1.2rem; line-height: 1; color: var(--ink); background: var(--panel); border: 1px solid var(--rule); cursor: pointer; transition: border-color .2s, color .2s, transform .2s; }
+.pk-arrow:hover { border-color: var(--moon); color: var(--moon); transform: translateY(-2px); }
+.pk-arrow:active { transform: scale(.92); }
+@media (max-width: 640px) { .picker { width: 100%; } }
+@media (prefers-reduced-motion: reduce) { .pk-track, .pk-item { transition: none; } }
 </style>
 </head>
 <body>
@@ -432,7 +515,13 @@ footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8p
         <span class="label">Work</span>
         <h2 id="work-h">Selected projects</h2>
       </div>
-      <div class="filters" role="group" aria-label="Filter projects by area">
+      <div class="picker" id="picker" role="group" aria-label="Filter projects by area">
+        <button class="pk-arrow" id="pk-prev" type="button" aria-label="Previous area">‹</button>
+        <div class="pk-view" id="pk-view" tabindex="0" aria-describedby="pk-live"><div class="pk-track" id="pk-track"></div></div>
+        <button class="pk-arrow" id="pk-next" type="button" aria-label="Next area">›</button>
+        <span class="sr-only" id="pk-live" aria-live="polite"></span>
+      </div>
+      <div class="filters" hidden>
         <button class="chip-btn" id="f-all" data-f="all" aria-pressed="true">All</button>
         <button class="chip-btn" id="f-ai" data-f="ai" aria-pressed="false">AI/ML</button>
         <button class="chip-btn" id="f-ops" data-f="ops" aria-pressed="false">DevOps &amp; Infra</button>
@@ -971,5 +1060,198 @@ footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8p
 })();
 </script>
 
+<script>
+(function () {
+  if (!window.matchMedia || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+  /* Split the name into letters and the thesis into words */
+  var h1 = document.querySelector('h1');
+  if (h1 && h1.firstChild && h1.firstChild.nodeType === 3) {
+    var name = h1.firstChild.textContent, frag = document.createDocumentFragment();
+    h1.setAttribute('aria-label', h1.textContent.replace(/\s+/g, ' ').trim());
+    name.split('').forEach(function (c, i) {
+      var s = document.createElement('span');
+      s.className = 'ch' + (c === ' ' ? ' sp' : ''); s.textContent = c === ' ' ? ' ' : c;
+      s.style.setProperty('--i', i); s.setAttribute('aria-hidden', 'true'); frag.appendChild(s);
+    });
+    h1.replaceChild(frag, h1.firstChild);
+  }
+  var th = document.querySelector('.thesis');
+  if (th) {
+    var words = th.textContent.trim().split(/\s+/);
+    th.textContent = '';
+    words.forEach(function (w, i) {
+      var s = document.createElement('span'); s.className = 'w'; s.textContent = w; s.style.setProperty('--i', i);
+      th.appendChild(s); if (i < words.length - 1) th.appendChild(document.createTextNode(' '));
+    });
+  }
+
+  /* Decode effect for headings and labels */
+  var glyphs = '<>/\\[]{}=+*#01';
+  function decode(el) {
+    if (el._busy || el.children.length) return;
+    var text = el.dataset.text || (el.dataset.text = el.textContent);
+    el._busy = true;
+    var start = performance.now(), dur = Math.min(900, 260 + text.length * 22);
+    (function frame(now) {
+      var t = Math.min(1, (now - start) / dur), out = '';
+      for (var i = 0; i < text.length; i++) {
+        var c = text[i];
+        out += (c === ' ' || i / text.length < t) ? c : glyphs[(Math.random() * glyphs.length) | 0];
+      }
+      el.textContent = out;
+      if (t < 1) requestAnimationFrame(frame); else { el.textContent = text; el._busy = false; }
+    })(start);
+  }
+  var decodables = document.querySelectorAll('h2, .label, .console-head span, .kind');
+  if (fine) decodables.forEach(function (el) { el.addEventListener('mouseenter', function () { decode(el); }); });
+
+  /* Scroll-in for fine-grained items, staggered by position among siblings */
+  var groups = [
+    ['.pillars > div', 'up'], ['.journey li', 'up'], ['.abroad .path li', 'up'],
+    ['.pts li', 'left'], ['.stack', 'up'], ['.proj .links', 'up'], ['.proj p', 'up'],
+    ['.svc-row', 'left'], ['.list li', 'right'], ['tbody tr', 'left'], ['.crow', 'right'],
+    ['.flow li', 'up'], ['.job li', 'left'], ['.job .meta', 'left'], ['.sec-intro', 'up'],
+    ['.console dl div', 'right'], ['.msg-open', 'zoom'], ['footer > *', 'up'], ['.feature .arch', 'zoom']
+  ];
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      var el = e.target; el.classList.add('in'); io.unobserve(el);
+      /* once revealed, drop the reveal classes so hover lifts respond instantly */
+      if (el.classList.contains('rv')) setTimeout(function () { el.classList.remove('rv', 'up', 'left', 'right', 'zoom', 'in'); el.style.removeProperty('--d'); }, 1300);
+      if (el.matches('.sec-head')) { var h = el.querySelector('h2'); if (h) decode(h); var l = el.querySelector('.label'); if (l) setTimeout(function () { decode(l); }, 150); }
+      if (el.matches('h2.small')) decode(el);
+    });
+  }, { rootMargin: '0px 0px -6% 0px', threshold: 0.1 });
+
+  groups.forEach(function (g) {
+    document.querySelectorAll(g[0]).forEach(function (el) {
+      if (el.closest('.hero')) return;
+      if (el.getBoundingClientRect().top < innerHeight * 0.95) return;
+      var idx = Array.prototype.indexOf.call(el.parentElement.children, el);
+      el.style.setProperty('--d', (Math.min(idx, 8) * 0.06 + 0.08) + 's');
+      el.classList.add('rv', g[1]); io.observe(el);
+    });
+  });
+  /* Headings: underline + decode when they arrive; ones already on screen get it now */
+  document.querySelectorAll('.sec-head, h2.small').forEach(function (el) {
+    if (el.getBoundingClientRect().top < innerHeight * 0.95) { el.classList.add('in'); return; }
+    io.observe(el);
+  });
+  setTimeout(function () {
+    document.querySelectorAll('.rv:not(.in)').forEach(function (el) {
+      if (el.getBoundingClientRect().top < innerHeight) { el.classList.add('in'); io.unobserve(el); setTimeout(function () { el.classList.remove('rv', 'up', 'left', 'right', 'zoom', 'in'); }, 1300); }
+    });
+  }, 2500);
+
+  /* Click feedback on cards and panels */
+  document.addEventListener('click', function (e) {
+    var t = e.target.closest('.proj, .job, .crow, .pillars > div, .list li, .svc-row, .path li');
+    if (!t || e.target.closest('a, button, input, textarea, select')) return;
+    t.classList.remove('squish'); void t.offsetWidth; t.classList.add('squish');
+  });
+})();
+</script>
+<script>
+(function () {
+  var chips = Array.prototype.slice.call(document.querySelectorAll('.filters .chip-btn'));
+  var view = document.getElementById('pk-view'), track = document.getElementById('pk-track');
+  if (!chips.length || !view) return;
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var N = chips.length, COPIES = 7, MID = 3, items = [], iw = 0, W = 0;
+  var live = document.getElementById('pk-live');
+
+  for (var c = 0; c < COPIES; c++) chips.forEach(function (ch, k) {
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = 'pk-item'; b.textContent = ch.textContent; b.tabIndex = -1;
+    b.dataset.i = items.length; track.appendChild(b); items.push(b);
+  });
+  var start = chips.findIndex(function (ch) { return ch.getAttribute('aria-pressed') === 'true'; });
+  var cur = MID * N + Math.max(0, start);
+  function mod(i) { return ((i % N) + N) % N; }
+  function base() { return W / 2 - (cur * iw + iw / 2); }
+  function paint(animate, extra) {
+    track.style.transition = animate && !reduce ? '' : 'none';
+    track.style.transform = 'translate3d(' + (base() + (extra || 0)) + 'px,0,0)';
+    items.forEach(function (b, i) {
+      var on = i === cur;
+      b.classList.toggle('on', on); b.classList.toggle('near', Math.abs(i - cur) === 1);
+      b.setAttribute('aria-hidden', on ? 'false' : 'true');
+    });
+    if (!animate || reduce) { void track.offsetWidth; track.style.transition = ''; }
+  }
+  function measure() {
+    W = view.clientWidth; iw = W / 2;
+    items.forEach(function (b) { b.style.width = iw + 'px'; });
+    paint(false);
+  }
+  function normalize() {
+    if (cur < (MID - 1) * N || cur >= (MID + 2) * N) { cur = MID * N + mod(cur); paint(false); }
+  }
+  var applyT;
+  function go(delta) {
+    if (!delta) return;
+    if (cur + delta < N || cur + delta >= (COPIES - 1) * N) { cur = MID * N + mod(cur); paint(false); }
+    cur += delta; paint(true);
+    var k = mod(cur);
+    live.textContent = 'Showing ' + chips[k].textContent + ' projects';
+    clearTimeout(applyT);
+    applyT = setTimeout(function () { chips[k].click(); }, 260);
+    if (reduce) normalize();
+  }
+  track.addEventListener('transitionend', function (e) { if (e.target === track && e.propertyName === 'transform') normalize(); });
+
+  document.getElementById('pk-prev').addEventListener('click', function () { go(-1); });
+  document.getElementById('pk-next').addEventListener('click', function () { go(1); });
+  view.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowLeft') { e.preventDefault(); go(-1); }
+    else if (e.key === 'ArrowRight') { e.preventDefault(); go(1); }
+    else if (e.key === 'Home') { e.preventDefault(); go(-mod(cur)); }
+  });
+
+  /* Wheel / trackpad: one step per gesture chunk */
+  var acc = 0, lock = 0;
+  view.addEventListener('wheel', function (e) {
+    var d = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+    e.preventDefault();
+    var now = Date.now(); if (now < lock) return;
+    acc += d;
+    if (Math.abs(acc) > 30) { go(acc > 0 ? 1 : -1); acc = 0; lock = now + 280; }
+  }, { passive: false });
+
+  /* Drag / swipe with momentum-free snapping */
+  var down = null, moved = false;
+  view.addEventListener('pointerdown', function (e) {
+    down = { x: e.clientX, id: e.pointerId }; moved = false;
+  });
+  view.addEventListener('pointermove', function (e) {
+    if (!down) return;
+    var dx = e.clientX - down.x;
+    if (!moved && Math.abs(dx) > 5) { moved = true; try { view.setPointerCapture(down.id); } catch (err) {} view.classList.add('dragging'); }
+    if (moved) paint(false, dx);
+  });
+  function end(e) {
+    if (!down) return;
+    var dx = e.clientX - down.x; down = null; view.classList.remove('dragging');
+    if (moved) {
+      var steps = Math.round(-dx / iw) || (Math.abs(dx) > 30 ? (dx < 0 ? 1 : -1) : 0);
+      if (steps) go(steps); else paint(true);
+    }
+  }
+  view.addEventListener('pointerup', end);
+  view.addEventListener('pointercancel', end);
+  track.addEventListener('click', function (e) {
+    var b = e.target.closest('.pk-item');
+    if (!b || moved) return;
+    go(+b.dataset.i - cur);
+  });
+
+  if ('ResizeObserver' in window) new ResizeObserver(measure).observe(view);
+  addEventListener('resize', measure);
+  measure();
+})();
+</script>
 </body>
 </html>

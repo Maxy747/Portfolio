@@ -6,6 +6,22 @@
 <meta name="description" content="Mazin Abdul Azeez, AI/ML engineer building intelligent applications, automated infrastructure, and secure systems.">
 <meta property="og:title" content="Mazin Abdul Azeez">
 <meta property="og:description" content="AI/ML engineer building intelligent applications, automated infrastructure, and secure systems.">
+<meta name="theme-color" content="#0b0f14">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://maxy747.github.io/Portfolio/">
+<meta property="og:site_name" content="Mazin Abdul Azeez">
+<meta property="og:image" content="https://maxy747.github.io/Portfolio/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Mazin Abdul Azeez, AI/ML Engineer: building intelligent applications, automated infrastructure, and secure systems.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Mazin Abdul Azeez · AI/ML Engineer">
+<meta name="twitter:description" content="Building intelligent applications, automated infrastructure, and secure systems.">
+<meta name="twitter:image" content="https://maxy747.github.io/Portfolio/og-image.png">
+
 <style>[hidden]{display:none!important} img{max-width:100%}</style>
 <title>Mazin Abdul Azeez</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -950,6 +966,17 @@ footer.site-foot { justify-content: normal; align-items: stretch; width: 100%; }
 /* Footer: availability on the right, above the links */
 .foot-right { display: grid; justify-items: end; gap: 10px; }
 @media (max-width: 640px) { .foot-right { justify-items: start; } }
+
+/* Brand mark */
+.brand { display: inline-flex; align-items: center; gap: 10px; }
+.brand-mark { width: 26px; height: 26px; flex: none; }
+.foot-brand .brand-mark { width: 30px; height: 30px; }
+@media (prefers-reduced-motion: no-preference) {
+  .brand-mark { transition: transform .35s cubic-bezier(.2,.75,.2,1); }
+  .brand:hover .brand-mark { transform: rotate(-8deg) scale(1.08); }
+  .bm-dot { animation: bmPulse 2.4s ease-in-out infinite; transform-origin: 51.5px 12.5px; }
+  @keyframes bmPulse { 50% { transform: scale(.8); opacity: .7; } }
+}
 </style>
 </head>
 <body>
@@ -959,7 +986,7 @@ footer.site-foot { justify-content: normal; align-items: stretch; width: 100%; }
 <div class="spot" id="spot" aria-hidden="true"></div>
 <nav aria-label="Primary">
   <div class="nav-in">
-    <a class="brand" href="#top">M.A.<b>X</b></a>
+    <a class="brand" href="#top"><svg class="brand-mark" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="#0b0f14"/><rect x="1.5" y="1.5" width="61" height="61" rx="12.5" fill="none" stroke="#223040" stroke-width="3"/><path d="M15 49V17M49 49V17" stroke="#e4ebf1" stroke-width="7" stroke-linecap="square" fill="none"/><path d="M15 17L32 37L49 17" stroke="#a9d4ff" stroke-width="7" stroke-linecap="square" fill="none"/><circle class="bm-dot" cx="51.5" cy="12.5" r="5.5" fill="#5fd39a" stroke="#0b0f14" stroke-width="2.5"/></svg>M.A.<b>X</b></a>
     <button class="menu-btn" id="menu-btn" type="button" aria-expanded="false" aria-controls="nav-links">Menu</button>
     <div class="nav-links" id="nav-links">
       <a href="#work">Work</a><a href="#lab">Infra lab</a><a href="#experience">Experience</a><a href="#education">Education</a><a href="#stack">Stack</a><a href="#contact">Contact</a><a href="https://maxy747.github.io/Portfolio/Mazin_Abdul_Azeez_Resume.pdf" target="_blank" rel="noopener">Resume ↗</a>
@@ -1543,7 +1570,7 @@ footer.site-foot { justify-content: normal; align-items: stretch; width: 100%; }
   <footer class="site-foot">
     <div class="foot-top">
       <div class="foot-brand">
-        <a class="brand" href="#top">M.A.<b>X</b></a>
+        <a class="brand" href="#top"><svg class="brand-mark" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="#0b0f14"/><rect x="1.5" y="1.5" width="61" height="61" rx="12.5" fill="none" stroke="#223040" stroke-width="3"/><path d="M15 49V17M49 49V17" stroke="#e4ebf1" stroke-width="7" stroke-linecap="square" fill="none"/><path d="M15 17L32 37L49 17" stroke="#a9d4ff" stroke-width="7" stroke-linecap="square" fill="none"/><circle class="bm-dot" cx="51.5" cy="12.5" r="5.5" fill="#5fd39a" stroke="#0b0f14" stroke-width="2.5"/></svg>M.A.<b>X</b></a>
         <span>Mazin Abdul Azeez · AI/ML Engineer</span>
       </div>
       <div class="foot-right">

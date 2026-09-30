@@ -442,6 +442,15 @@ tbody tr:hover th { color: var(--ink); }
 .pk-item { overflow: hidden; text-overflow: ellipsis; }
 @media (max-width: 640px) { .picker { width: 100%; } }
 @media (prefers-reduced-motion: reduce) { .pk-track, .pk-item { transition: none; } }
+
+/* Pillars: slide in left to right, one by one */
+@media (prefers-reduced-motion: no-preference) {
+  .pillars.seq:not(.go) > div { opacity: 0; }
+  .pillars.seq.go > div { animation: pillIn .7s cubic-bezier(.2,.75,.2,1) backwards; animation-delay: calc(var(--i) * .16s); }
+  .pillars.seq.go > div b { animation: pillText .6s cubic-bezier(.2,.75,.2,1) backwards; animation-delay: calc(var(--i) * .16s + .15s); }
+  @keyframes pillIn { from { opacity: 0; transform: translateX(-36px); filter: blur(6px); } to { opacity: 1; transform: none; filter: blur(0); } }
+  @keyframes pillText { from { opacity: 0; letter-spacing: .25em; } to { opacity: 1; letter-spacing: normal; } }
+}
 </style>
 </head>
 <body>
@@ -1255,6 +1264,19 @@ tbody tr:hover th { color: var(--ink); }
   if ('ResizeObserver' in window) new ResizeObserver(measure).observe(view);
   addEventListener('resize', measure);
   measure();
+})();
+</script>
+<script>
+(function () {
+  var row = document.querySelector('.pillars');
+  if (!row || !window.matchMedia || matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
+  Array.prototype.forEach.call(row.children, function (d, i) { d.classList.remove('rv', 'up', 'left', 'right', 'zoom', 'in'); d.style.removeProperty('--d'); d.style.setProperty('--i', i); });
+  row.classList.add('seq');
+  var io = new IntersectionObserver(function (es) {
+    es.forEach(function (e) { if (e.isIntersecting) { row.classList.add('go'); io.disconnect(); } });
+  }, { threshold: 0.35 });
+  io.observe(row);
+  setTimeout(function () { if (row.getBoundingClientRect().top < innerHeight) row.classList.add('go'); }, 3000);
 })();
 </script>
 </body>

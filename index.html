@@ -1012,6 +1012,98 @@ footer.site-foot { justify-content: normal; align-items: stretch; width: 100%; }
 html, body, body * { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
 input, textarea, select, [contenteditable] { -webkit-user-select: text; user-select: text; }
 img { -webkit-user-drag: none; }
+
+/* ---------- Navbar: CTA buttons, hamburger, fixed on mobile ---------- */
+.nav-in { flex-wrap: wrap; }
+.brand { order: 0; }
+.nav-links { order: 1; margin-left: auto; }
+.nav-cta { order: 2; display: flex; gap: 8px; }
+.menu-btn { order: 3; }
+.nav-btn { display: inline-flex; align-items: center; gap: 7px; padding: 7px 12px; font-family: var(--mono); font-size: .72rem; letter-spacing: .06em; text-transform: uppercase;
+  color: var(--ink); text-decoration: none; background: var(--panel); border: 1px solid var(--rule); transition: transform .2s cubic-bezier(.2,.75,.2,1), border-color .2s, color .2s, background-color .2s, box-shadow .25s; }
+.nav-btn svg { width: 13px; height: 13px; fill: currentColor; flex: none; }
+.nav-btn:hover { transform: translateY(-2px); border-color: var(--moon); color: var(--moon); }
+.nav-btn.primary { background: var(--moon); border-color: var(--moon); color: var(--bg); }
+.nav-btn.primary:hover { color: var(--bg); box-shadow: 0 8px 20px -10px var(--moon); filter: brightness(1.06); }
+.menu-btn { position: relative; width: 40px; height: 36px; padding: 0 !important; }
+.menu-btn span { position: absolute; left: 10px; right: 10px; height: 2px; background: var(--ink); border-radius: 2px; transition: transform .3s cubic-bezier(.2,.75,.2,1), opacity .2s, top .3s; }
+.menu-btn span:nth-child(1) { top: 11px; } .menu-btn span:nth-child(2) { top: 17px; } .menu-btn span:nth-child(3) { top: 23px; }
+.menu-btn[aria-expanded="true"] span:nth-child(1) { top: 17px; transform: rotate(45deg); }
+.menu-btn[aria-expanded="true"] span:nth-child(2) { opacity: 0; transform: scaleX(.2); }
+.menu-btn[aria-expanded="true"] span:nth-child(3) { top: 17px; transform: rotate(-45deg); }
+.menu-btn:hover span { background: var(--moon); }
+@media (max-width: 720px) {
+  nav { position: fixed; top: 0; left: 0; right: 0; margin: 0; padding: calc(10px + env(safe-area-inset-top, 0px)) 16px 10px; }
+  body { padding-top: 58px; }
+  .nav-in { gap: 10px; }
+  .nav-cta { margin-left: auto; gap: 6px; }
+  .nav-btn { padding: 7px 10px; }
+  .nav-links { order: 4; margin-left: 0; }
+  .nav-links.open { max-height: calc(100vh - 70px); overflow-y: auto; }
+}
+@media (max-width: 400px) {
+  .nav-btn { padding: 7px 9px; font-size: .68rem; gap: 5px; }
+  .brand-txt { display: none; }
+}
+
+/* Hero actions: second row with Resume + Contact me, glowing */
+.hero-main > .cta { display: grid; gap: 10px; justify-items: start; }
+.cta-row { display: flex; flex-wrap: wrap; gap: 10px; }
+.cta-row.hl { width: 100%; max-width: 440px; }
+.cta-row.hl .btn { flex: 1 1 0; min-width: 140px; justify-content: center; text-align: center; padding: 13px 18px; display: inline-flex; align-items: center; gap: 8px;
+  border-color: var(--moon); color: var(--moon); box-shadow: 0 0 0 1px color-mix(in srgb, var(--moon) 40%, transparent) inset, 0 0 18px -6px var(--moon); }
+.cta-row.hl .btn.primary { color: var(--bg); background: linear-gradient(135deg, var(--moon), color-mix(in srgb, var(--moon) 70%, #ffffff)); }
+.cta-row.hl .btn:hover { transform: translateY(-2px); box-shadow: 0 0 0 1px var(--moon) inset, 0 12px 30px -10px var(--moon); }
+.cta-row.hl .btn.primary:hover { color: var(--bg); background: linear-gradient(135deg, var(--moon), color-mix(in srgb, var(--moon) 55%, #ffffff)); }
+@media (max-width: 640px) { .cta-row.hl { max-width: none; } }
+@media (prefers-reduced-motion: no-preference) {
+  .cta-row.hl .btn { animation: ctaGlow 2.8s ease-in-out infinite; }
+  .cta-row.hl .btn:nth-child(2) { animation-delay: 1.4s; }
+  @keyframes ctaGlow { 0%, 100% { box-shadow: 0 0 0 1px color-mix(in srgb, var(--moon) 40%, transparent) inset, 0 0 14px -6px var(--moon); } 50% { box-shadow: 0 0 0 1px var(--moon) inset, 0 0 30px -4px var(--moon); } }
+}
+
+/* Navbar always on top: sticky on desktop, fixed on mobile */
+nav { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 40; }
+@media (max-width: 720px) { nav { position: fixed; top: 0; } }
+
+/* ---------- Section wheel (desktop) + section toast (mobile) ---------- */
+.secwheel { position: fixed; right: 14px; top: 50%; transform: translateY(-50%); z-index: 30; width: 220px; height: 300px; pointer-events: none; perspective: 700px; }
+.sw-view { position: absolute; inset: 0; overflow: hidden; -webkit-mask-image: linear-gradient(transparent, #000 24%, #000 76%, transparent); mask-image: linear-gradient(transparent, #000 24%, #000 76%, transparent); }
+.sw-track { position: absolute; right: 0; top: 0; display: flex; flex-direction: column; align-items: flex-end; transition: transform .6s cubic-bezier(.2,.75,.2,1); transform-style: preserve-3d; }
+.sw-item { pointer-events: auto; height: 36px; display: flex; align-items: center; justify-content: flex-end; gap: 10px; padding: 0 2px 0 8px; background: none; border: 0; cursor: pointer;
+  color: var(--ink-2); font-family: var(--mono); font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; transform-origin: right center; transition: transform .6s cubic-bezier(.2,.75,.2,1), opacity .6s, color .3s; }
+.sw-label { padding: 5px 9px; background: color-mix(in srgb, var(--panel) 94%, transparent); border: 1px solid var(--rule); white-space: nowrap; opacity: 0; transform: translateX(10px); transition: opacity .25s, transform .3s cubic-bezier(.2,.75,.2,1), border-color .25s, box-shadow .3s; pointer-events: none; }
+.sw-tick { width: 14px; height: 2px; background: currentColor; flex: none; transition: width .4s cubic-bezier(.2,.75,.2,1), box-shadow .3s; }
+.sw-item:hover { color: var(--ink); } .sw-item:hover .sw-tick { width: 22px; }
+.sw-item.on { color: var(--moon); } .sw-item.on .sw-tick { width: 30px; box-shadow: 0 0 10px var(--moon); }
+.secwheel:hover .sw-label, .secwheel.pop .sw-item.on .sw-label, .sw-item:focus-visible .sw-label { opacity: 1; transform: none; }
+.secwheel.pop .sw-item.on .sw-label, .secwheel:hover .sw-item.on .sw-label { border-color: var(--moon); box-shadow: 0 0 18px -6px var(--moon); }
+.sw-item:focus-visible { outline: none; } .sw-item:focus-visible .sw-tick { width: 30px; }
+.sw-count { position: absolute; right: 2px; bottom: -4px; font-family: var(--mono); font-size: .64rem; color: var(--ink-2); letter-spacing: .06em; }
+@media (max-width: 1099px) { .secwheel { display: none; } }
+
+.sec-toast { position: fixed; left: 50%; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); z-index: 35; transform: translate(-50%, 160%); display: flex; align-items: center; gap: 10px; padding: 9px 14px;
+  background: color-mix(in srgb, var(--panel) 94%, transparent); backdrop-filter: blur(8px); border: 1px solid var(--moon); color: var(--moon); font-family: var(--mono); font-size: .74rem; letter-spacing: .08em; text-transform: uppercase;
+  box-shadow: 0 12px 30px -12px var(--moon); transition: transform .45s cubic-bezier(.2,.75,.2,1); pointer-events: none; white-space: nowrap; }
+.sec-toast.show { transform: translate(-50%, 0); }
+.sec-toast b { font-weight: 400; color: var(--ink-2); }
+@media (min-width: 1100px) { .sec-toast { display: none; } }
+@media (prefers-reduced-motion: reduce) { .sw-track, .sw-item, .sw-label, .sec-toast { transition: none; } }
+
+/* ---------- Matching scrollbar ---------- */
+html { scrollbar-color: color-mix(in srgb, var(--moon) 55%, var(--panel)) var(--bg); scrollbar-width: thin; }
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--bg); border-left: 1px solid var(--rule); }
+::-webkit-scrollbar-thumb { background: linear-gradient(180deg, color-mix(in srgb, var(--moon) 75%, transparent), color-mix(in srgb, var(--moon) 40%, var(--panel))); border: 2px solid var(--bg); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: var(--moon); box-shadow: 0 0 10px var(--moon); }
+::-webkit-scrollbar-corner { background: var(--bg); }
+
+/* ---------- Hero buttons: both rows share one width ---------- */
+.hero-main > .cta { display: inline-grid; grid-template-columns: minmax(0, 1fr); justify-self: start; width: auto; }
+.cta-row { width: 100%; }
+.cta-row.hl { max-width: none; }
+.cta-row:not(.hl) .btn { flex: 1 1 auto; text-align: center; justify-content: center; display: inline-flex; }
+@media (max-width: 640px) { .hero-main > .cta { display: grid; width: 100%; } }
 </style>
 </head>
 <body>
@@ -1022,10 +1114,15 @@ img { -webkit-user-drag: none; }
 <nav aria-label="Primary">
   <div class="nav-in">
     <a class="brand" href="#top"><svg class="brand-mark" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="#0b0f14"/><rect x="1.5" y="1.5" width="61" height="61" rx="12.5" fill="none" stroke="#223040" stroke-width="3"/><path d="M15 49V17M49 49V17" stroke="#e4ebf1" stroke-width="7" stroke-linecap="square" fill="none"/><path d="M15 17L32 37L49 17" stroke="#a9d4ff" stroke-width="7" stroke-linecap="square" fill="none"/><circle class="bm-dot" cx="51.5" cy="12.5" r="5.5" fill="#5fd39a" stroke="#0b0f14" stroke-width="2.5"/></svg><span class="brand-txt">M.A.<b>X</b></span></a>
-    <button class="menu-btn" id="menu-btn" type="button" aria-expanded="false" aria-controls="nav-links">Menu</button>
+    <button class="menu-btn" id="menu-btn" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Open menu"><span></span><span></span><span></span></button>
     <div class="nav-links" id="nav-links">
-      <a href="#work">Work</a><a href="#lab">Infra lab</a><a href="#experience">Experience</a><a href="#education">Education</a><a href="#stack">Stack</a><a href="#contact">Contact</a><a href="https://maxy747.github.io/Portfolio/Mazin_Abdul_Azeez_Resume.pdf" target="_blank" rel="noopener">Resume ↗</a>
+      <a href="#work">Work</a><a href="#lab">Infra lab</a><a href="#experience">Experience</a><a href="#education">Education</a><a href="#stack">Stack</a>
     </div>
+    <div class="nav-cta">
+      <a class="nav-btn" href="#contact"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1.5 2h13A1.5 1.5 0 0116 3.5v9a1.5 1.5 0 01-1.5 1.5h-13A1.5 1.5 0 010 12.5v-9A1.5 1.5 0 011.5 2zm-.2 1.6v.3L8 8.6l6.7-4.7v-.3H1.3zm13.4 1.9L8.4 9.9a.7.7 0 01-.8 0L1.3 5.5v7c0 .1.1.2.2.2h13c.1 0 .2-.1.2-.2v-7z"/></svg><span>Contact</span></a>
+      <a class="nav-btn primary" href="https://maxy747.github.io/Portfolio/Mazin_Abdul_Azeez_Resume.pdf" download="Mazin_Abdul_Azeez_Resume.pdf"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M7.25 1h1.5v7.19l2.47-2.47 1.06 1.06L8 11.06 3.72 6.78l1.06-1.06 2.47 2.47V1zM2 12.5h1.5V14h9v-1.5H14V15.5H2v-3z"/></svg><span>Resume</span></a>
+    </div>
+    
   </div>
 </nav>
 
@@ -1038,11 +1135,8 @@ img { -webkit-user-drag: none; }
       <p class="thesis">Building intelligent applications, automated infrastructure, and secure systems.</p>
       <p class="lede">2026 BE graduate in AI &amp; Machine Learning. I take ideas all the way to working systems: the model and the API, and also the database, containers, CI/CD, the server it runs on, the monitoring, and the security around it.</p>
       <div class="cta">
-        <a class="btn primary" href="#work">View work</a>
-        <a class="btn" href="https://github.com/Maxy747" target="_blank" rel="noopener">GitHub</a>
-        <a class="btn" href="https://www.linkedin.com/in/mazin-abdul-azeez/" target="_blank" rel="noopener">LinkedIn</a>
-        <a class="btn" href="https://maxy747.github.io/Portfolio/Mazin_Abdul_Azeez_Resume.pdf" target="_blank" rel="noopener">Resume</a>
-        <a class="btn" href="#contact">Contact</a>
+        <div class="cta-row"><a class="btn primary" href="#work">View work</a><a class="btn" href="https://github.com/Maxy747" target="_blank" rel="noopener">GitHub</a><a class="btn" href="https://www.linkedin.com/in/mazin-abdul-azeez/" target="_blank" rel="noopener">LinkedIn</a></div>
+        <div class="cta-row hl"><a class="btn" href="https://maxy747.github.io/Portfolio/Mazin_Abdul_Azeez_Resume.pdf" target="_blank" rel="noopener">Resume</a><a class="btn primary" href="#contact">Contact me</a></div>
       </div>
     </div>
 
@@ -1665,9 +1759,9 @@ img { -webkit-user-drag: none; }
   var menuBtn = document.getElementById('menu-btn'), links = document.getElementById('nav-links');
   menuBtn.addEventListener('click', function () {
     var open = links.classList.toggle('open');
-    menuBtn.setAttribute('aria-expanded', String(open)); menuBtn.textContent = open ? 'Close' : 'Menu';
+    menuBtn.setAttribute('aria-expanded', String(open)); menuBtn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
   });
-  links.querySelectorAll('a').forEach(function (a) { a.addEventListener('click', function () { links.classList.remove('open'); menuBtn.setAttribute('aria-expanded', 'false'); menuBtn.textContent = 'Menu'; }); });
+  links.querySelectorAll('a').forEach(function (a) { a.addEventListener('click', function () { links.classList.remove('open'); menuBtn.setAttribute('aria-expanded', 'false'); menuBtn.setAttribute('aria-label', 'Open menu'); }); });
 
   /* Contact form: composes the message; the page itself cannot send email */
   var TO = 'mr.mazinabdulazeez@gmail.com';
@@ -2169,6 +2263,85 @@ img { -webkit-user-drag: none; }
     });
     go(0);
   });
+})();
+</script>
+<script>
+(function () {
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function sec(sel) { var el = document.querySelector(sel); return el ? (el.closest('section, header') || el) : null; }
+  var defs = [
+    ['.hero', 'Intro'], ['#about-h', 'About'], ['#work', 'Projects'], ['#lab', 'Infra lab'], ['#experience', 'Experience'],
+    ['#education', 'Education'], ['#stack', 'Stack'], ['#cert-h', 'Certs & wins'], ['#contact', 'Contact']
+  ];
+  var targets = defs.map(function (d) { return { el: sec(d[0]), label: d[1] }; }).filter(function (t) { return t.el; });
+  if (!targets.length) return;
+
+  var wheel = document.createElement('nav');
+  wheel.className = 'secwheel'; wheel.setAttribute('aria-label', 'Sections');
+  wheel.innerHTML = '<div class="sw-view"><div class="sw-track"></div></div><span class="sw-count" aria-hidden="true"></span>';
+  var track = wheel.querySelector('.sw-track'), count = wheel.querySelector('.sw-count');
+  var items = targets.map(function (t, i) {
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = 'sw-item'; b.setAttribute('aria-label', 'Go to ' + t.label);
+    b.innerHTML = '<span class="sw-label"></span><span class="sw-tick"></span>';
+    b.querySelector('.sw-label').textContent = t.label;
+    b.addEventListener('click', function () { go(i); });
+    track.appendChild(b); return b;
+  });
+  document.body.appendChild(wheel);
+  var toast = document.createElement('div');
+  toast.className = 'sec-toast'; toast.setAttribute('aria-hidden', 'true');
+  document.body.appendChild(toast);
+
+  var active = -1, popT, toastT, ITEM = 36, H = 300;
+  function pad(n) { return (n < 10 ? '0' : '') + n; }
+  function paint() {
+    track.style.transform = 'translateY(' + (H / 2 - (active * ITEM + ITEM / 2)) + 'px)';
+    items.forEach(function (b, i) {
+      var d = i - active, a = Math.abs(d);
+      b.classList.toggle('on', d === 0);
+      if (d === 0) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current');
+      b.style.transform = 'rotateX(' + (-d * 16) + 'deg) translateZ(' + (-a * 14) + 'px) scale(' + Math.max(.72, 1 - a * .09) + ')';
+      b.style.opacity = String(Math.max(.18, 1 - a * .22));
+    });
+    count.textContent = pad(active + 1) + ' / ' + pad(targets.length);
+  }
+  function announce() {
+    wheel.classList.add('pop'); clearTimeout(popT); popT = setTimeout(function () { wheel.classList.remove('pop'); }, 1600);
+    toast.textContent = '';
+    var b = document.createElement('b'); b.textContent = pad(active + 1);
+    toast.appendChild(b); toast.appendChild(document.createTextNode(' ' + targets[active].label));
+    toast.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(function () { toast.classList.remove('show'); }, 1500);
+  }
+  function current() {
+    var line = innerHeight * 0.38, idx = 0;
+    for (var i = 0; i < targets.length; i++) if (targets[i].el.getBoundingClientRect().top <= line) idx = i;
+    if (innerHeight + scrollY >= document.documentElement.scrollHeight - 4) idx = targets.length - 1;
+    return idx;
+  }
+  var first = true;
+  function onScroll() {
+    var i = current();
+    if (i !== active) { active = i; paint(); if (!first) announce(); }
+    first = false;
+  }
+  function go(i) {
+    i = Math.max(0, Math.min(targets.length - 1, i));
+    var el = targets[i].el, y = el.getBoundingClientRect().top + scrollY - (i === 0 ? 0 : 70);
+    window.scrollTo({ top: Math.max(0, y), behavior: reduce ? 'auto' : 'smooth' });
+  }
+  var lock = 0;
+  wheel.addEventListener('wheel', function (e) {
+    e.preventDefault(); var now = Date.now(); if (now < lock) return;
+    lock = now + 650; go(active + (e.deltaY > 0 ? 1 : -1));
+  }, { passive: false });
+  wheel.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowDown') { e.preventDefault(); go(active + 1); items[Math.min(active + 1, items.length - 1)].focus(); }
+    if (e.key === 'ArrowUp') { e.preventDefault(); go(active - 1); items[Math.max(active - 1, 0)].focus(); }
+  });
+  addEventListener('scroll', onScroll, { passive: true });
+  addEventListener('resize', onScroll);
+  onScroll();
 })();
 </script>
 </body>

@@ -535,6 +535,66 @@ h1 .word { display: inline-block; white-space: nowrap; }
 .proj-item .links a:active, .job .links a:active { transform: scale(.97); }
 .job .links { margin-top: 12px; }
 @media (max-width: 420px) { .proj-item .links a, .job .links a { flex: 1 1 auto; justify-content: center; } }
+
+/* ---------- Infra lab additions ---------- */
+.lab-more { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.lab-more > .proj { display: flex; flex-direction: column; gap: 12px; }
+.lab-more h3 { font-size: var(--s3); }
+.pipes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.pipe { background: var(--panel); border: 1px solid var(--rule); border-top: 2px solid var(--moon); padding: 18px 20px; display: grid; gap: 12px; align-content: start; min-width: 0; }
+.pipe .kind { font-family: var(--mono); font-size: var(--s1); color: var(--moon); text-transform: uppercase; letter-spacing: .08em; }
+.flowline { gap: 10px 26px; }
+.flowline li { color: var(--ink); }
+.flowline li:last-child { border-color: var(--rule); color: var(--ink); }
+@media (max-width: 880px) { .lab-more, .pipes { grid-template-columns: minmax(0, 1fr); } }
+
+/* heartbeat timeline */
+.hb { display: grid; gap: 10px; padding: 12px 14px 8px; background: var(--panel-2); border: 1px solid var(--rule); }
+.hb-track { position: relative; height: 44px; margin-inline: 12px; }
+.hb-track::before { content: ""; position: absolute; left: 0; right: 0; top: 12px; height: 1px; background: var(--rule); }
+.hb-mark { position: absolute; left: var(--x); top: 0; transform: translateX(-50%); display: grid; justify-items: center; gap: 8px; }
+.hb-mark i { width: 11px; height: 11px; border-radius: 50%; margin-top: 7px; background: var(--panel-2); border: 1px dashed var(--ink-2); }
+.hb-mark.beat i { background: var(--ok); border: 0; box-shadow: 0 0 10px var(--ok); }
+.hb-mark.off i { background: var(--c-cyber); border: 0; }
+.hb-mark b { font-family: var(--mono); font-size: .68rem; font-weight: 400; color: var(--ink-2); }
+.hb-scan { position: absolute; top: 2px; left: 0; width: 1px; height: 22px; background: var(--moon); box-shadow: 0 0 8px var(--moon); opacity: 0; }
+.hb-status { display: grid; font-family: var(--mono); font-size: var(--s1); letter-spacing: .08em; }
+.hb-status span { grid-area: 1 / 1; }
+.s-on { color: var(--ok); opacity: 0; }
+.s-off { color: var(--c-cyber); }
+
+/* compute burst */
+.burst { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.burst li { display: grid; grid-template-columns: 6.5rem minmax(0, 1fr); gap: 10px; font-size: .9rem; color: var(--ink-2); align-items: start; }
+.bn { font-family: var(--mono); font-size: .7rem; text-transform: uppercase; letter-spacing: .06em; padding: 3px 7px; text-align: center; color: var(--ok); border: 1px solid color-mix(in srgb, var(--ok) 45%, var(--rule)); }
+.bn.off { color: var(--ink-2); border-color: var(--rule); }
+.bn.data { color: var(--moon); border-color: color-mix(in srgb, var(--moon) 45%, var(--rule)); }
+@media (max-width: 420px) { .burst li { grid-template-columns: minmax(0, 1fr); gap: 4px; } .bn { justify-self: start; } }
+
+@media (prefers-reduced-motion: no-preference) {
+  .hb-scan { animation: hbScan 6s linear infinite; }
+  .s-on { animation: hbOn 6s steps(1, end) infinite; }
+  .s-off { animation: hbOff 6s steps(1, end) infinite; }
+  .hb-mark.beat i { animation: hbBeat 6s ease-out infinite; }
+  .hb-mark.off i { animation: hbDead 6s ease-out infinite; }
+  @keyframes hbScan { 0% { left: 0; opacity: 1; } 80% { left: 100%; opacity: 1; } 81%, 100% { left: 100%; opacity: 0; } }
+  @keyframes hbOn { 0% { opacity: 1; } 80% { opacity: 0; } }
+  @keyframes hbOff { 0% { opacity: 0; } 80% { opacity: 1; } }
+  @keyframes hbBeat { 0% { transform: scale(1.8); } 12% { transform: scale(1); } }
+  @keyframes hbDead { 0%, 79% { opacity: .25; transform: scale(1); box-shadow: none; } 82% { opacity: 1; transform: scale(1.6); box-shadow: 0 0 14px var(--c-cyber); } 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 10px var(--c-cyber); } }
+
+  /* data flowing along the pipelines */
+  .flowline li { animation: flowLit 3.2s ease-in-out infinite; }
+  .flowline li:nth-child(2) { animation-delay: .5s; }
+  .flowline li:nth-child(3) { animation-delay: 1s; }
+  .flowline li:nth-child(4) { animation-delay: 1.5s; }
+  @keyframes flowLit { 0%, 40%, 100% { border-color: var(--rule); box-shadow: none; } 15% { border-color: var(--moon); box-shadow: 0 0 16px -4px var(--moon); } }
+
+  /* the three cards and two pipelines arrive one by one */
+  .lab-more.seq:not(.go) > *, .pipes.seq:not(.go) > * { opacity: 0; }
+  .lab-more.seq.go > *, .pipes.seq.go > * { animation: pillIn .75s cubic-bezier(.2,.75,.2,1) backwards; animation-delay: calc(var(--i) * .16s); }
+}
+@media (prefers-reduced-motion: reduce) { .s-on { opacity: 1; } .s-off { opacity: 0; } }
 </style>
 </head>
 <body>
@@ -768,10 +828,63 @@ h1 .word { display: inline-block; white-space: nowrap; }
             <li>NILAVUS<small>reads live; Supabase as fallback</small></li>
           </ol>
         </article>
-        <article class="proj">
-          <span class="kind">Photo pipeline</span>
-          <p class="mono">Phone → Immich on Dosimeter → SMB → NASig storage</p>
-        </article>
+      </div>
+    </div>
+  
+    <div class="lab-more">
+      <article class="proj">
+        <span class="kind">Security · public dashboard</span>
+        <h3>No secrets in the browser</h3>
+        <p>The dashboard is public on GitHub Pages, so I treat everything it ships as readable by anyone.</p>
+        <ul class="pts">
+          <li><b>Keys</b><span>No service-role key or telemetry secret is in the browser bundle or the repository.</span></li>
+          <li><b>Visitors</b><span>The visitor counter stores a daily salted hash. Raw IP addresses are never stored.</span></li>
+        </ul>
+      </article>
+
+      <article class="proj">
+        <span class="kind">Reliability · node health</span>
+        <h3>When a node goes quiet</h3>
+        <p>Each node sends a heartbeat to Supabase every 30 seconds. After 90 seconds of silence it is marked offline.</p>
+        <div class="hb" role="img" aria-label="Timeline: last heartbeat at 0 seconds, missed beats at 30 and 60 seconds, node marked offline at 90 seconds">
+          <div class="hb-track" aria-hidden="true">
+            <span class="hb-mark beat" style="--x:0%"><i></i><b>0s</b></span>
+            <span class="hb-mark miss" style="--x:33.333%"><i></i><b>30s</b></span>
+            <span class="hb-mark miss" style="--x:66.666%"><i></i><b>60s</b></span>
+            <span class="hb-mark off" style="--x:100%"><i></i><b>90s</b></span>
+            <span class="hb-scan"></span>
+          </div>
+          <div class="hb-status" aria-hidden="true"><span class="s-on">● ONLINE</span><span class="s-off">● OFFLINE</span></div>
+        </div>
+        <ul class="pts">
+          <li><b>Power cut</b><span>Dosimeter is a laptop, so its battery keeps it awake and serving through power cuts.</span></li>
+        </ul>
+      </article>
+
+      <article class="proj">
+        <span class="kind">Compute · on demand</span>
+        <h3>Borrowing the main PC's GPU</h3>
+        <p>Dosimeter handles the services day to day. When my main PC is on, the heavy work moves to its RTX 3060 to finish faster.</p>
+        <ul class="burst" aria-label="What runs where">
+          <li><span class="bn">Main PC on</span><span>Immich background processing, CUDA machine learning and NVENC video processing run on the RTX 3060.</span></li>
+          <li><span class="bn off">Main PC off</span><span>Dosimeter carries on alone. Nothing depends on the PC being up.</span></li>
+          <li><span class="bn data">Either way</span><span>Primary media stays on NASig.</span></li>
+        </ul>
+      </article>
+    </div>
+
+    <div class="pipes">
+      <div class="pipe">
+        <span class="kind">Photo pipeline</span>
+        <ol class="path flowline" aria-label="Photo pipeline">
+          <li>Phone</li><li>Immich on Dosimeter</li><li>SMB/CIFS</li><li>NASig storage</li>
+        </ol>
+      </div>
+      <div class="pipe">
+        <span class="kind">Media pipeline</span>
+        <ol class="path flowline" aria-label="Media pipeline">
+          <li>NASig library</li><li>Jellyfin · Kavita · Navidrome</li><li>Any device via Tailscale</li>
+        </ol>
       </div>
     </div>
   </section>
@@ -1429,6 +1542,21 @@ h1 .word { display: inline-block; white-space: nowrap; }
   }, { threshold: 0.2 });
   io.observe(list);
   setTimeout(function () { if (list.getBoundingClientRect().top < innerHeight) list.classList.add('go'); }, 3000);
+})();
+</script>
+<script>
+(function () {
+  if (!window.matchMedia || matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
+  document.querySelectorAll('.lab-more, .pipes').forEach(function (row) {
+    Array.prototype.forEach.call(row.children, function (c, i) {
+      c.style.setProperty('--i', i);
+      c.querySelectorAll('.rv').forEach(function (x) { x.classList.remove('rv', 'up', 'left', 'right', 'zoom', 'in'); x.style.removeProperty('--d'); });
+    });
+    row.classList.add('seq');
+    var io = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { row.classList.add('go'); io.disconnect(); } }, { threshold: 0.2 });
+    io.observe(row);
+    setTimeout(function () { if (row.getBoundingClientRect().top < innerHeight) row.classList.add('go'); }, 3000);
+  });
 })();
 </script>
 </body>

@@ -1218,6 +1218,67 @@ html { scrollbar-color: color-mix(in srgb, var(--moon) 55%, var(--panel)) var(--
   .msg-open.ping { animation: msgPing .9s ease-out 1; }
   @keyframes msgPing { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--moon) 70%, transparent); } 100% { box-shadow: 0 0 0 18px transparent; } }
 }
+
+/* ---------- Fun fact: school route across three countries ---------- */
+.funfact { --ae: #f2c46d; --in: #5fd39a; --om: #ff7f9e; position: relative; background: var(--panel); border: 1px solid var(--rule); padding: 28px clamp(18px, 3vw, 36px) 24px; display: grid; gap: 22px; overflow: visible; }
+.funfact::before { content: ""; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(60% 80% at 100% 0%, color-mix(in srgb, var(--moon) 8%, transparent), transparent 60%); }
+.ff-head { display: grid; gap: 8px; position: relative; }
+.ff-title { font-family: var(--display); font-weight: 600; font-size: clamp(1.35rem, 2.4vw, 2rem); line-height: 1.2; margin: 0; text-wrap: balance; }
+.ff-title::after { display: none !important; }
+.ff-title em { font-style: normal; color: var(--moon); }
+.ff-route { position: relative; padding: 34px 0 6px; }
+.ff-line { position: absolute; left: 5.5%; right: 5.5%; top: 52px; height: 2px; background: var(--rule); border-radius: 2px; }
+.ff-fill { position: absolute; inset: 0; transform-origin: left center; border-radius: 2px;
+  background: linear-gradient(90deg, var(--ae), var(--in) 14%, var(--ae) 28%, var(--in) 40%, var(--ae) 52%, var(--om) 64%, var(--in) 76%, var(--om) 88%, var(--in)); }
+.ff-stops { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(9, minmax(0, 1fr)); position: relative; }
+.ff-stop { position: relative; display: grid; justify-items: center; gap: 8px; }
+.ff-dot { position: relative; display: grid; justify-items: center; gap: 6px; padding: 0; background: none; border: 0; cursor: pointer; color: inherit; }
+.ff-cc { font-family: var(--mono); font-size: .66rem; letter-spacing: .08em; color: var(--c); }
+.ff-dot i { width: 14px; height: 14px; border-radius: 50%; background: var(--panel); border: 2px solid var(--c); box-shadow: 0 0 0 4px var(--panel); transition: transform .25s cubic-bezier(.2,.75,.2,1), background-color .25s, box-shadow .25s; }
+.ff-dot:hover i, .ff-dot:focus-visible i { transform: scale(1.35); background: var(--c); box-shadow: 0 0 0 4px var(--panel), 0 0 16px var(--c); }
+.ff-dot:focus-visible { outline: none; }
+.ff-yr { font-family: var(--mono); font-size: .7rem; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.c-ae { --c: var(--ae); } .c-in { --c: var(--in); } .c-om { --c: var(--om); }
+.ff-tip { position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translate(-50%, 6px); width: max-content; max-width: 220px; z-index: 5; pointer-events: none; opacity: 0;
+  display: grid; gap: 2px; padding: 8px 10px; background: var(--panel-2); border: 1px solid var(--c); box-shadow: 0 12px 30px -14px #000; text-align: left;
+  transition: opacity .2s, transform .25s cubic-bezier(.2,.75,.2,1); }
+.ff-tip b { font-family: var(--body); font-size: .8rem; font-weight: 600; color: var(--ink); }
+.ff-tip span { font-family: var(--mono); font-size: .66rem; color: var(--ink-2); }
+.ff-stop:first-child .ff-tip { left: 0; transform: translate(0, 6px); }
+.ff-stop:last-child .ff-tip { left: auto; right: 0; transform: translate(0, 6px); }
+.ff-dot:hover + .ff-yr + .ff-tip, .ff-dot:focus-visible + .ff-yr + .ff-tip, .ff-stop.show .ff-tip { opacity: 1; transform: translate(-50%, 0); }
+.ff-stop:first-child .ff-dot:hover ~ .ff-tip, .ff-stop:first-child .ff-dot:focus-visible ~ .ff-tip, .ff-stop:first-child.show .ff-tip,
+.ff-stop:last-child .ff-dot:hover ~ .ff-tip, .ff-stop:last-child .ff-dot:focus-visible ~ .ff-tip, .ff-stop:last-child.show .ff-tip { transform: translate(0, 0); }
+.ff-foot { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px 24px; position: relative; }
+.ff-stats { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.ff-stats li { display: inline-flex; align-items: baseline; gap: 6px; padding: 6px 12px; background: var(--panel-2); border: 1px solid var(--rule); font-family: var(--mono); font-size: .72rem; color: var(--ink-2); text-transform: uppercase; letter-spacing: .06em; }
+.ff-stats b { font-family: var(--display); font-size: 1.15rem; color: var(--ink); font-variant-numeric: tabular-nums; }
+.ff-legend { list-style: none; margin: 0; padding: 0; display: flex; gap: 14px; font-family: var(--mono); font-size: .7rem; color: var(--ink-2); }
+.ff-legend li { display: inline-flex; align-items: center; gap: 6px; }
+.ff-legend i { width: 8px; height: 8px; border-radius: 50%; background: var(--c); }
+.ff-note { margin: 0; font-size: .9rem; color: var(--ink-2); position: relative; }
+@media (max-width: 640px) {
+  .ff-cc { font-size: .56rem; letter-spacing: .02em; }
+  .ff-yr { font-size: .56rem; }
+  .ff-dot i { width: 11px; height: 11px; box-shadow: 0 0 0 3px var(--panel); }
+  .ff-line { top: 49px; }
+  .ff-tip { max-width: 170px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .funfact.ff-armed .ff-fill { transform: scaleX(0); }
+  .funfact.ff-armed .ff-stop { opacity: 0; transform: translateY(8px); }
+  .funfact.ff-go .ff-fill { transform: scaleX(1); transition: transform 2.2s cubic-bezier(.45,.05,.3,1) .2s; }
+  .funfact.ff-go .ff-stop { opacity: 1; transform: none; transition: opacity .45s ease, transform .45s cubic-bezier(.2,.75,.2,1); transition-delay: calc(.25s + var(--i) * .24s); }
+  .funfact.ff-go .ff-dot i { animation: ffPing .7s ease-out 1; animation-delay: calc(.3s + var(--i) * .24s); }
+  @keyframes ffPing { 0% { box-shadow: 0 0 0 4px var(--panel), 0 0 0 4px var(--c); } 100% { box-shadow: 0 0 0 4px var(--panel), 0 0 0 14px transparent; } }
+}
+
+/* Footer on phones: everything left-aligned, wordmark visible */
+@media (max-width: 640px) {
+  .foot-top { align-items: flex-start !important; }
+  .foot-brand { justify-items: start; text-align: left; }
+  .foot-brand .brand-txt { display: inline !important; }
+}
 </style>
 </head>
 <body>
@@ -1702,13 +1763,6 @@ html { scrollbar-color: color-mix(in srgb, var(--moon) 55%, var(--panel)) var(--
         </div>
       </li>
     </ol>
-    <div class="abroad">
-      <span class="label">Schooled across three countries</span>
-      <ul class="path" aria-label="Countries where I studied">
-        <li>UAE · Al Ain</li><li>Oman · Sohar, Buraimi</li><li>India · Kerala</li>
-      </ul>
-      <p class="sec-intro">CBSE schooling in the UAE and Oman, and state-board schooling in Kerala, before engineering.</p>
-    </div>
   </section>
 
 
@@ -1808,6 +1862,26 @@ html { scrollbar-color: color-mix(in srgb, var(--moon) 55%, var(--panel)) var(--
         </div>
       </div>
     </div>
+  </section>
+
+  <section class="funfact" id="funfact" aria-labelledby="ff-h">
+    <div class="ff-head">
+      <span class="label">Fun fact</span>
+      <h2 id="ff-h" class="ff-title">Before engineering, I'd already changed countries <em>8 times</em>.</h2>
+    </div>
+    <div class="ff-route">
+      <span class="ff-line" aria-hidden="true"><span class="ff-fill"></span></span>
+      <ol class="ff-stops"><li class="ff-stop c-ae" style="--i:0"><button type="button" class="ff-dot" aria-label="UAE, Gayathi · UAE · 2006–08"><span class="ff-cc">AE</span><i></i></button><span class="ff-yr">2006</span><span class="ff-tip" role="tooltip"><b>Gayathi</b><span>UAE · 2006–08</span></span></li><li class="ff-stop c-in" style="--i:1"><button type="button" class="ff-dot" aria-label="India, Safa EMS · Matool, Kerala · 2008–10"><span class="ff-cc">IN</span><i></i></button><span class="ff-yr">2008</span><span class="ff-tip" role="tooltip"><b>Safa EMS</b><span>Matool, Kerala · 2008–10</span></span></li><li class="ff-stop c-ae" style="--i:2"><button type="button" class="ff-dot" aria-label="UAE, Grace Valley Indian School · Al Ain · 2010–12"><span class="ff-cc">AE</span><i></i></button><span class="ff-yr">2010</span><span class="ff-tip" role="tooltip"><b>Grace Valley Indian School</b><span>Al Ain · 2010–12</span></span></li><li class="ff-stop c-in" style="--i:3"><button type="button" class="ff-dot" aria-label="India, PES Wadihuda · Payangadi, Kerala · 2012–14"><span class="ff-cc">IN</span><i></i></button><span class="ff-yr">2012</span><span class="ff-tip" role="tooltip"><b>PES Wadihuda</b><span>Payangadi, Kerala · 2012–14</span></span></li><li class="ff-stop c-ae" style="--i:4"><button type="button" class="ff-dot" aria-label="UAE, Grace Valley Indian School · Al Ain · 2014–15"><span class="ff-cc">AE</span><i></i></button><span class="ff-yr">2014</span><span class="ff-tip" role="tooltip"><b>Grace Valley Indian School</b><span>Al Ain · 2014–15</span></span></li><li class="ff-stop c-om" style="--i:5"><button type="button" class="ff-dot" aria-label="Oman, Indian School Sohar · Sohar · 2015–17"><span class="ff-cc">OM</span><i></i></button><span class="ff-yr">2015</span><span class="ff-tip" role="tooltip"><b>Indian School Sohar</b><span>Sohar · 2015–17</span></span></li><li class="ff-stop c-in" style="--i:6"><button type="button" class="ff-dot" aria-label="India, PJHS · Puthiyangadi, Payangadi · 2017–18"><span class="ff-cc">IN</span><i></i></button><span class="ff-yr">2017</span><span class="ff-tip" role="tooltip"><b>PJHS</b><span>Puthiyangadi, Payangadi · 2017–18</span></span></li><li class="ff-stop c-om" style="--i:7"><button type="button" class="ff-dot" aria-label="Oman, Indian School Buraimi · Buraimi · 2018–19"><span class="ff-cc">OM</span><i></i></button><span class="ff-yr">2018</span><span class="ff-tip" role="tooltip"><b>Indian School Buraimi</b><span>Buraimi · 2018–19</span></span></li><li class="ff-stop c-in" style="--i:8"><button type="button" class="ff-dot" aria-label="India, Wadihuda High School, then CHMKM Govt HSS · Payangadi, then Matool · 2019–22"><span class="ff-cc">IN</span><i></i></button><span class="ff-yr">2019</span><span class="ff-tip" role="tooltip"><b>Wadihuda High School, then CHMKM Govt HSS</b><span>Payangadi, then Matool · 2019–22</span></span></li></ol>
+    </div>
+    <div class="ff-foot">
+      <ul class="ff-stats">
+        <li><b data-n="9">9</b> schools</li><li><b data-n="3">3</b> countries</li><li><b data-n="2">2</b> syllabi</li><li><b data-n="8">8</b> moves</li>
+      </ul>
+      <ul class="ff-legend" aria-label="Legend">
+        <li class="c-ae"><i></i>UAE</li><li class="c-om"><i></i>Oman</li><li class="c-in"><i></i>India</li>
+      </ul>
+    </div>
+    <p class="ff-note">One habit it left me with: adapting fast.</p>
   </section>
 
   <footer class="site-foot">
@@ -2525,6 +2599,47 @@ html { scrollbar-color: color-mix(in srgb, var(--moon) 55%, var(--panel)) var(--
     });
   });
   if (location.hash === '#message') setTimeout(goToMessage, 400);
+})();
+</script>
+<script>
+(function () {
+  var ff = document.getElementById('funfact');
+  if (!ff) return;
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  /* tap a stop on touch screens to show its tooltip */
+  ff.querySelectorAll('.ff-stop').forEach(function (st) {
+    st.querySelector('.ff-dot').addEventListener('click', function () {
+      var on = !st.classList.contains('show');
+      ff.querySelectorAll('.ff-stop.show').forEach(function (x) { x.classList.remove('show'); });
+      if (on) st.classList.add('show');
+    });
+  });
+  document.addEventListener('click', function (e) { if (!e.target.closest('.ff-stop')) ff.querySelectorAll('.ff-stop.show').forEach(function (x) { x.classList.remove('show'); }); });
+  /* keep the route line on the dots' centre at every size */
+  var route = ff.querySelector('.ff-route'), line = ff.querySelector('.ff-line');
+  function place() {
+    var dot = ff.querySelector('.ff-dot i'); if (!dot) return;
+    var r = route.getBoundingClientRect(), d = dot.getBoundingClientRect();
+    line.style.top = (d.top + d.height / 2 - r.top - 1) + 'px';
+  }
+  place(); addEventListener('resize', place); addEventListener('load', place);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(place);
+  if (reduce || !('IntersectionObserver' in window)) return;
+  if (ff.getBoundingClientRect().top < innerHeight * .85) return; /* already on screen: leave it static */
+  ff.classList.add('ff-armed');
+  function countUp() {
+    ff.querySelectorAll('.ff-stats b').forEach(function (b, k) {
+      var n = +b.dataset.n, i = 0; b.textContent = '0';
+      setTimeout(function tick() { i++; b.textContent = String(i); if (i < n) setTimeout(tick, 1100 / n); }, 300 + k * 120);
+    });
+    setTimeout(function () { ff.querySelectorAll('.ff-stats b').forEach(function (b) { b.textContent = b.dataset.n; }); }, 2600);
+  }
+  var io = new IntersectionObserver(function (es) {
+    if (!es[0].isIntersecting) return;
+    io.disconnect(); ff.classList.add('ff-go'); countUp();
+  }, { threshold: 0.35 });
+  io.observe(ff);
+  setTimeout(function () { if (!ff.classList.contains('ff-go') && ff.getBoundingClientRect().top < innerHeight) { ff.classList.add('ff-go'); } }, 4000);
 })();
 </script>
 </body>

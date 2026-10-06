@@ -1350,7 +1350,38 @@ html { scrollbar-color: color-mix(in srgb, var(--moon) 55%, var(--panel)) var(--
 .ff-stats li b { line-height: 1; }
 .ff-nextchip { gap: 8px !important; }
 .ff-nextchip .dot { align-self: center !important; flex: none; }
+
+/* ---------- Theme toggle ---------- */
+.theme-btn { position: relative; width: 36px; height: 34px; display: inline-grid; place-items: center; padding: 0; cursor: pointer; color: var(--ink); background: var(--panel); border: 1px solid var(--rule);
+  transition: transform .2s cubic-bezier(.2,.75,.2,1), border-color .2s, color .2s, box-shadow .25s; }
+.theme-btn:hover { transform: translateY(-2px); border-color: var(--moon); color: var(--moon); box-shadow: 0 8px 20px -12px var(--moon); }
+.theme-btn svg { grid-area: 1 / 1; width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; transition: transform .45s cubic-bezier(.2,.75,.2,1), opacity .3s; }
+.theme-btn .t-moon { fill: currentColor; stroke: none; }
+/* dark (default): show the sun, i.e. "go light" */
+.theme-btn .t-moon { opacity: 0; transform: rotate(-90deg) scale(.5); }
+:root[data-theme="light"] .theme-btn .t-sun { opacity: 0; transform: rotate(90deg) scale(.5); }
+:root[data-theme="light"] .theme-btn .t-moon { opacity: 1; transform: none; }
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) .theme-btn .t-sun { opacity: 0; transform: rotate(90deg) scale(.5); }
+  :root:not([data-theme="dark"]) .theme-btn .t-moon { opacity: 1; transform: none; }
+}
+html.theme-anim, html.theme-anim body, html.theme-anim *:not(.ff-fill):not(.sw-track) { transition: background-color .45s ease, color .45s ease, border-color .45s ease !important; }
+
+/* light-mode polish for pieces that used dark-only colours */
+:root[data-theme="light"] .funfact { --ae: #b07d12; --in: #13804a; --om: #c23a5c; }
+:root[data-theme="light"] .nav-btn.primary, :root[data-theme="light"] .btn.primary, :root[data-theme="light"] .cta-row.hl .btn.primary { color: #fff; }
+:root[data-theme="light"] .msg-open { color: #fff; }
+:root[data-theme="light"] .sw-label { text-shadow: 0 0 6px var(--bg), 0 0 2px var(--bg); }
+:root[data-theme="light"] .spot { opacity: .5; }
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) .funfact { --ae: #b07d12; --in: #13804a; --om: #c23a5c; }
+  :root:not([data-theme="dark"]) .nav-btn.primary, :root:not([data-theme="dark"]) .btn.primary, :root:not([data-theme="dark"]) .msg-open { color: #fff; }
+}
+@media (max-width: 400px) { .theme-btn { width: 32px; } }
 </style>
+<script>
+(function () { try { var t = localStorage.getItem('max-theme'); if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t); } catch (e) {} })();
+</script>
 </head>
 <body>
 
@@ -1365,6 +1396,10 @@ html { scrollbar-color: color-mix(in srgb, var(--moon) 55%, var(--panel)) var(--
       <a href="#work">Work</a><a href="#lab">Infra lab</a><a href="#experience">Experience</a><a href="#education">Education</a><a href="#stack">Stack</a>
     </div>
     <div class="nav-cta">
+      <button class="theme-btn" id="theme-btn" type="button" aria-label="Switch to light mode" title="Switch theme">
+        <svg class="t-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.4M12 19.1v2.4M2.5 12h2.4M19.1 12h2.4M5.3 5.3l1.7 1.7M17 17l1.7 1.7M5.3 18.7 7 17M17 7l1.7-1.7"/></svg>
+        <svg class="t-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.2 14.6A8.5 8.5 0 0 1 9.4 3.8a8.5 8.5 0 1 0 10.8 10.8z"/></svg>
+      </button>
       <a class="nav-btn" href="#contact"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1.5 2h13A1.5 1.5 0 0116 3.5v9a1.5 1.5 0 01-1.5 1.5h-13A1.5 1.5 0 010 12.5v-9A1.5 1.5 0 011.5 2zm-.2 1.6v.3L8 8.6l6.7-4.7v-.3H1.3zm13.4 1.9L8.4 9.9a.7.7 0 01-.8 0L1.3 5.5v7c0 .1.1.2.2.2h13c.1 0 .2-.1.2-.2v-7z"/></svg><span>Contact</span></a>
       <a class="nav-btn primary" href="https://maxy747.github.io/Portfolio/Mazin_Abdul_Azeez_Resume.pdf" download="Mazin_Abdul_Azeez_Resume.pdf"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M7.25 1h1.5v7.19l2.47-2.47 1.06 1.06L8 11.06 3.72 6.78l1.06-1.06 2.47 2.47V1zM2 12.5h1.5V14h9v-1.5H14V15.5H2v-3z"/></svg><span>Resume</span></a>
     </div>
@@ -2722,6 +2757,24 @@ html { scrollbar-color: color-mix(in srgb, var(--moon) 55%, var(--panel)) var(--
   }, { threshold: 0.35 });
   io.observe(ff);
   setTimeout(function () { if (!ff.classList.contains('ff-go') && ff.getBoundingClientRect().top < innerHeight) { ff.classList.add('ff-go'); setTimeout(function () { ff.classList.add('ff-done'); }, 4200); } }, 4000);
+})();
+</script>
+<script>
+(function () {
+  var btn = document.getElementById('theme-btn'); if (!btn) return;
+  var root = document.documentElement, mq = window.matchMedia('(prefers-color-scheme: light)');
+  function current() { return root.getAttribute('data-theme') || (mq.matches ? 'light' : 'dark'); }
+  function label() { btn.setAttribute('aria-label', current() === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'); }
+  btn.addEventListener('click', function () {
+    var next = current() === 'dark' ? 'light' : 'dark';
+    root.classList.add('theme-anim');
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('max-theme', next); } catch (e) {}
+    label();
+    setTimeout(function () { root.classList.remove('theme-anim'); }, 500);
+  });
+  if (mq.addEventListener) mq.addEventListener('change', label);
+  label();
 })();
 </script>
 </body>

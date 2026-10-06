@@ -1343,6 +1343,13 @@ html { scrollbar-color: color-mix(in srgb, var(--moon) 55%, var(--panel)) var(--
   .funfact.ff-vert.ff-armed .ff-stop { transform: translateX(-10px); }
   .funfact.ff-vert.ff-go .ff-stop { transform: none; }
 }
+
+/* Fun fact stat chips: equal height, contents vertically centred */
+.ff-stats { align-items: stretch; }
+.ff-stats li { align-items: center; min-height: 40px; }
+.ff-stats li b { line-height: 1; }
+.ff-nextchip { gap: 8px !important; }
+.ff-nextchip .dot { align-self: center !important; flex: none; }
 </style>
 </head>
 <body>

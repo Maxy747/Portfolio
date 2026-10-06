@@ -1306,6 +1306,43 @@ html { scrollbar-color: color-mix(in srgb, var(--moon) 55%, var(--panel)) var(--
   .ff-nextchip .dot { animation: nextPulse 2s ease-in-out infinite; }
   @keyframes nextPulse { 50% { box-shadow: 0 0 0 4px var(--panel), 0 0 14px 2px var(--ae); } }
 }
+
+/* ---------- Fun fact v3: line placed by script, dock-style hover zoom, vertical timeline on phones ---------- */
+.funfact .ff-line { left: var(--lx, 0px) !important; right: auto !important; top: var(--ly, 0px) !important; width: var(--lw, 0px) !important; height: var(--lh, 2px) !important; }
+.ff-stop { transition: transform .32s cubic-bezier(.2,.75,.2,1), opacity .3s; transform-origin: 50% 55%; }
+.funfact.ff-done .ff-stop { transition: transform .32s cubic-bezier(.2,.75,.2,1), opacity .3s !important; transition-delay: 0s !important; }
+@media (hover: hover) and (min-width: 641px) {
+  .ff-stops:hover .ff-stop { opacity: .7; }
+  .ff-stops .ff-stop:hover { transform: scale(1.4) translateY(-4px); opacity: 1; z-index: 3; }
+  .ff-stops .ff-stop:hover + .ff-stop, .ff-stops .ff-stop:has(+ .ff-stop:hover) { transform: scale(1.15) translateY(-1px); opacity: .9; }
+  .ff-stops .ff-stop:hover .ff-dot i { background: var(--c); box-shadow: 0 0 0 4px var(--panel), 0 0 18px var(--c); }
+  .ff-stops .ff-stop:hover .ff-yr { color: var(--ink); }
+  .ff-stops .ff-stop:hover .ff-tip { transform: translate(-50%, 0) scale(.72); transform-origin: bottom center; }
+  .ff-stops .ff-stop:first-child:hover .ff-tip { transform: translate(0, 0) scale(.72); transform-origin: bottom left; }
+  .ff-stops .ff-stop:last-child:hover .ff-tip { transform: translate(0, 0) scale(.72); transform-origin: bottom right; }
+}
+
+/* phones: a proper vertical timeline with the school written out */
+.funfact.ff-vert .ff-route { padding: 6px 0 0; }
+.funfact.ff-vert .ff-stops { grid-template-columns: minmax(0, 1fr) !important; gap: 2px; }
+.funfact.ff-vert .ff-stop { grid-template-columns: 3.6rem 20px minmax(0, 1fr); justify-items: start; align-items: center; gap: 0 12px; padding: 7px 0; }
+.funfact.ff-vert .ff-yr { grid-column: 1; grid-row: 1; font-size: .7rem !important; color: var(--ink-2); justify-self: end; }
+.funfact.ff-vert .ff-dot { grid-column: 2; grid-row: 1; justify-self: center; }
+.funfact.ff-vert .ff-cc { display: none; }
+.funfact.ff-vert .ff-dot i { width: 12px !important; height: 12px !important; box-shadow: 0 0 0 4px var(--panel); }
+.funfact.ff-vert .ff-tip { grid-column: 3; grid-row: 1; position: static; opacity: 1 !important; transform: none !important; width: auto; max-width: none; padding: 0; background: none; border: 0; box-shadow: none; pointer-events: auto; }
+.funfact.ff-vert .ff-tip b { font-size: .86rem; }
+.funfact.ff-vert .ff-tip span { font-size: .68rem; }
+.funfact.ff-vert .ff-stop.is-next .ff-tip b { color: var(--ae); }
+.funfact.ff-vert .ff-fill { width: 100% !important; height: calc(100% * 10 / 11); background: linear-gradient(180deg, var(--moon), var(--ae) 10%, var(--in) 20%, var(--ae) 30%, var(--in) 40%, var(--ae) 50%, var(--om) 60%, var(--in) 70%, var(--om) 80%, var(--in) 90%, var(--in)) !important; transform-origin: top center; }
+.funfact.ff-vert .ff-dash { top: auto; bottom: 0; left: 0; right: 0; width: 100%; height: calc(100% / 11); background: repeating-linear-gradient(180deg, var(--ae) 0 6px, transparent 6px 11px); }
+.funfact.ff-vert .ff-stop:active { transform: scale(.98); }
+@media (prefers-reduced-motion: no-preference) {
+  .funfact.ff-vert.ff-armed .ff-fill { transform: scaleY(0); }
+  .funfact.ff-vert.ff-go .ff-fill { transform: scaleY(1); }
+  .funfact.ff-vert.ff-armed .ff-stop { transform: translateX(-10px); }
+  .funfact.ff-vert.ff-go .ff-stop { transform: none; }
+}
 </style>
 </head>
 <body>
@@ -2497,7 +2534,7 @@ html { scrollbar-color: color-mix(in srgb, var(--moon) 55%, var(--panel)) var(--
   function sec(sel) { var el = document.querySelector(sel); return el ? (el.closest('section, header') || el) : null; }
   var defs = [
     ['.hero', 'Intro'], ['#about-h', 'About'], ['#work', 'Projects'], ['#lab', 'Infra lab'], ['#experience', 'Experience'],
-    ['#education', 'Education'], ['#stack', 'Stack'], ['#cert-h', 'Certs & wins'], ['#contact', 'Contact']
+    ['#education', 'Education'], ['#stack', 'Stack'], ['#cert-h', 'Certs & wins'], ['#contact', 'Contact'], ['#funfact', 'Fun fact']
   ];
   var targets = defs.map(function (d) { return { el: sec(d[0]), label: d[1] }; }).filter(function (t) { return t.el; });
   if (!targets.length) return;
@@ -2645,11 +2682,21 @@ html { scrollbar-color: color-mix(in srgb, var(--moon) 55%, var(--panel)) var(--
   document.addEventListener('click', function (e) { if (!e.target.closest('.ff-stop')) ff.querySelectorAll('.ff-stop.show').forEach(function (x) { x.classList.remove('show'); }); });
   /* keep the route line on the dots' centre at every size */
   var route = ff.querySelector('.ff-route'), line = ff.querySelector('.ff-line');
+  var narrow = window.matchMedia('(max-width: 640px)');
   function place() {
-    var dot = ff.querySelector('.ff-dot i'); if (!dot) return;
-    var r = route.getBoundingClientRect(), d = dot.getBoundingClientRect();
-    line.style.top = (d.top + d.height / 2 - r.top - 1) + 'px';
+    ff.classList.toggle('ff-vert', narrow.matches);
+    var dots = ff.querySelectorAll('.ff-dot i'); if (!dots.length) return;
+    var r = route.getBoundingClientRect(), a = dots[0].getBoundingClientRect(), b = dots[dots.length - 1].getBoundingClientRect();
+    var ax = a.left + a.width / 2 - r.left, ay = a.top + a.height / 2 - r.top, bx = b.left + b.width / 2 - r.left, by = b.top + b.height / 2 - r.top;
+    if (narrow.matches) {
+      line.style.setProperty('--lx', (ax - 1) + 'px'); line.style.setProperty('--ly', ay + 'px');
+      line.style.setProperty('--lw', '2px'); line.style.setProperty('--lh', (by - ay) + 'px');
+    } else {
+      line.style.setProperty('--lx', ax + 'px'); line.style.setProperty('--ly', (ay - 1) + 'px');
+      line.style.setProperty('--lw', (bx - ax) + 'px'); line.style.setProperty('--lh', '2px');
+    }
   }
+  if (narrow.addEventListener) narrow.addEventListener('change', place);
   place(); addEventListener('resize', place); addEventListener('load', place);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(place);
   if (reduce || !('IntersectionObserver' in window)) return;
@@ -2664,10 +2711,10 @@ html { scrollbar-color: color-mix(in srgb, var(--moon) 55%, var(--panel)) var(--
   }
   var io = new IntersectionObserver(function (es) {
     if (!es[0].isIntersecting) return;
-    io.disconnect(); ff.classList.add('ff-go'); countUp();
+    io.disconnect(); ff.classList.add('ff-go'); countUp(); setTimeout(function () { ff.classList.add('ff-done'); }, 4200);
   }, { threshold: 0.35 });
   io.observe(ff);
-  setTimeout(function () { if (!ff.classList.contains('ff-go') && ff.getBoundingClientRect().top < innerHeight) { ff.classList.add('ff-go'); } }, 4000);
+  setTimeout(function () { if (!ff.classList.contains('ff-go') && ff.getBoundingClientRect().top < innerHeight) { ff.classList.add('ff-go'); setTimeout(function () { ff.classList.add('ff-done'); }, 4200); } }, 4000);
 })();
 </script>
 </body>

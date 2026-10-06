@@ -1279,6 +1279,33 @@ html { scrollbar-color: color-mix(in srgb, var(--moon) 55%, var(--panel)) var(--
   .foot-brand { justify-items: start; text-align: left; }
   .foot-brand .brand-txt { display: inline !important; }
 }
+
+/* Fun fact v2: 12 stops, birth dot, dashed "next" segment */
+.ff-stops { grid-template-columns: repeat(12, minmax(0, 1fr)) !important; }
+.ff-line { left: calc(100% / 24) !important; right: calc(100% / 24) !important; background: transparent !important; }
+.ff-fill { right: auto !important; width: calc(100% * 10/11); background: linear-gradient(90deg, var(--moon) 0.0%, var(--ae) 10.0%, var(--in) 20.0%, var(--ae) 30.0%, var(--in) 40.0%, var(--ae) 50.0%, var(--om) 60.0%, var(--in) 70.0%, var(--om) 80.0%, var(--in) 90.0%, var(--in) 100.0%) !important; }
+.ff-dash { position: absolute; top: 0; bottom: 0; right: 0; width: calc(100% / 11);
+  background: repeating-linear-gradient(90deg, var(--ae) 0 6px, transparent 6px 11px); opacity: .85; }
+.c-born { --c: var(--moon); }
+.c-born .ff-cc { font-size: .56rem; letter-spacing: .06em; }
+.c-born .ff-dot i { background: var(--moon); }
+.ff-stop.is-next .ff-dot i { border-style: dashed; }
+.ff-stop.is-next .ff-yr, .ff-stop.is-next .ff-cc { color: var(--ae); }
+.ff-nextchip { color: var(--ae) !important; border-color: color-mix(in srgb, var(--ae) 50%, var(--rule)) !important; }
+.ff-nextchip .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--ae); align-self: center; }
+@media (max-width: 640px) {
+  .ff-cc { font-size: .5rem !important; letter-spacing: 0 !important; }
+  .c-born .ff-cc { font-size: .44rem !important; }
+  .ff-yr { font-size: .5rem !important; }
+  .ff-dot i { width: 9px !important; height: 9px !important; border-width: 2px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .funfact.ff-armed .ff-dash { opacity: 0; }
+  .funfact.ff-go .ff-dash { opacity: .85; transition: opacity .6s ease 2.4s; }
+  .ff-stop.is-next .ff-dot i { animation: nextPulse 2s ease-in-out infinite; }
+  .ff-nextchip .dot { animation: nextPulse 2s ease-in-out infinite; }
+  @keyframes nextPulse { 50% { box-shadow: 0 0 0 4px var(--panel), 0 0 14px 2px var(--ae); } }
+}
 </style>
 </head>
 <body>
@@ -1867,15 +1894,16 @@ html { scrollbar-color: color-mix(in srgb, var(--moon) 55%, var(--panel)) var(--
   <section class="funfact" id="funfact" aria-labelledby="ff-h">
     <div class="ff-head">
       <span class="label">Fun fact</span>
-      <h2 id="ff-h" class="ff-title">Before engineering, I'd already changed countries <em>8 times</em>.</h2>
+      <h2 id="ff-h" class="ff-title">Before engineering, I'd already changed countries <em>8 times</em>. Move nine is next month.</h2>
     </div>
     <div class="ff-route">
-      <span class="ff-line" aria-hidden="true"><span class="ff-fill"></span></span>
-      <ol class="ff-stops"><li class="ff-stop c-ae" style="--i:0"><button type="button" class="ff-dot" aria-label="UAE, Gayathi · UAE · 2006–08"><span class="ff-cc">AE</span><i></i></button><span class="ff-yr">2006</span><span class="ff-tip" role="tooltip"><b>Gayathi</b><span>UAE · 2006–08</span></span></li><li class="ff-stop c-in" style="--i:1"><button type="button" class="ff-dot" aria-label="India, Safa EMS · Matool, Kerala · 2008–10"><span class="ff-cc">IN</span><i></i></button><span class="ff-yr">2008</span><span class="ff-tip" role="tooltip"><b>Safa EMS</b><span>Matool, Kerala · 2008–10</span></span></li><li class="ff-stop c-ae" style="--i:2"><button type="button" class="ff-dot" aria-label="UAE, Grace Valley Indian School · Al Ain · 2010–12"><span class="ff-cc">AE</span><i></i></button><span class="ff-yr">2010</span><span class="ff-tip" role="tooltip"><b>Grace Valley Indian School</b><span>Al Ain · 2010–12</span></span></li><li class="ff-stop c-in" style="--i:3"><button type="button" class="ff-dot" aria-label="India, PES Wadihuda · Payangadi, Kerala · 2012–14"><span class="ff-cc">IN</span><i></i></button><span class="ff-yr">2012</span><span class="ff-tip" role="tooltip"><b>PES Wadihuda</b><span>Payangadi, Kerala · 2012–14</span></span></li><li class="ff-stop c-ae" style="--i:4"><button type="button" class="ff-dot" aria-label="UAE, Grace Valley Indian School · Al Ain · 2014–15"><span class="ff-cc">AE</span><i></i></button><span class="ff-yr">2014</span><span class="ff-tip" role="tooltip"><b>Grace Valley Indian School</b><span>Al Ain · 2014–15</span></span></li><li class="ff-stop c-om" style="--i:5"><button type="button" class="ff-dot" aria-label="Oman, Indian School Sohar · Sohar · 2015–17"><span class="ff-cc">OM</span><i></i></button><span class="ff-yr">2015</span><span class="ff-tip" role="tooltip"><b>Indian School Sohar</b><span>Sohar · 2015–17</span></span></li><li class="ff-stop c-in" style="--i:6"><button type="button" class="ff-dot" aria-label="India, PJHS · Puthiyangadi, Payangadi · 2017–18"><span class="ff-cc">IN</span><i></i></button><span class="ff-yr">2017</span><span class="ff-tip" role="tooltip"><b>PJHS</b><span>Puthiyangadi, Payangadi · 2017–18</span></span></li><li class="ff-stop c-om" style="--i:7"><button type="button" class="ff-dot" aria-label="Oman, Indian School Buraimi · Buraimi · 2018–19"><span class="ff-cc">OM</span><i></i></button><span class="ff-yr">2018</span><span class="ff-tip" role="tooltip"><b>Indian School Buraimi</b><span>Buraimi · 2018–19</span></span></li><li class="ff-stop c-in" style="--i:8"><button type="button" class="ff-dot" aria-label="India, Wadihuda High School, then CHMKM Govt HSS · Payangadi, then Matool · 2019–22"><span class="ff-cc">IN</span><i></i></button><span class="ff-yr">2019</span><span class="ff-tip" role="tooltip"><b>Wadihuda High School, then CHMKM Govt HSS</b><span>Payangadi, then Matool · 2019–22</span></span></li></ol>
+      <span class="ff-line" aria-hidden="true"><span class="ff-fill"></span><span class="ff-dash"></span></span>
+      <ol class="ff-stops"><li class="ff-stop c-born" style="--i:0"><button type="button" class="ff-dot" aria-label="Born, 2003 · where it all starts"><span class="ff-cc">BORN</span><i></i></button><span class="ff-yr">2003</span><span class="ff-tip" role="tooltip"><b>Born</b><span>2003 · where it all starts</span></span></li><li class="ff-stop c-ae" style="--i:1"><button type="button" class="ff-dot" aria-label="Gayathi, UAE · 2006–08"><span class="ff-cc">AE</span><i></i></button><span class="ff-yr">2006</span><span class="ff-tip" role="tooltip"><b>Gayathi</b><span>UAE · 2006–08</span></span></li><li class="ff-stop c-in" style="--i:2"><button type="button" class="ff-dot" aria-label="Safa EMS, Matool, Kerala · 2008–10"><span class="ff-cc">IN</span><i></i></button><span class="ff-yr">2008</span><span class="ff-tip" role="tooltip"><b>Safa EMS</b><span>Matool, Kerala · 2008–10</span></span></li><li class="ff-stop c-ae" style="--i:3"><button type="button" class="ff-dot" aria-label="Grace Valley Indian School, Al Ain · 2010–12"><span class="ff-cc">AE</span><i></i></button><span class="ff-yr">2010</span><span class="ff-tip" role="tooltip"><b>Grace Valley Indian School</b><span>Al Ain · 2010–12</span></span></li><li class="ff-stop c-in" style="--i:4"><button type="button" class="ff-dot" aria-label="PES Wadihuda, Payangadi, Kerala · 2012–14"><span class="ff-cc">IN</span><i></i></button><span class="ff-yr">2012</span><span class="ff-tip" role="tooltip"><b>PES Wadihuda</b><span>Payangadi, Kerala · 2012–14</span></span></li><li class="ff-stop c-ae" style="--i:5"><button type="button" class="ff-dot" aria-label="Grace Valley Indian School, Al Ain · 2014–15"><span class="ff-cc">AE</span><i></i></button><span class="ff-yr">2014</span><span class="ff-tip" role="tooltip"><b>Grace Valley Indian School</b><span>Al Ain · 2014–15</span></span></li><li class="ff-stop c-om" style="--i:6"><button type="button" class="ff-dot" aria-label="Indian School Sohar, Sohar · 2015–17"><span class="ff-cc">OM</span><i></i></button><span class="ff-yr">2015</span><span class="ff-tip" role="tooltip"><b>Indian School Sohar</b><span>Sohar · 2015–17</span></span></li><li class="ff-stop c-in" style="--i:7"><button type="button" class="ff-dot" aria-label="PJHS, Puthiyangadi, Payangadi · 2017–18"><span class="ff-cc">IN</span><i></i></button><span class="ff-yr">2017</span><span class="ff-tip" role="tooltip"><b>PJHS</b><span>Puthiyangadi, Payangadi · 2017–18</span></span></li><li class="ff-stop c-om" style="--i:8"><button type="button" class="ff-dot" aria-label="Indian School Buraimi, Buraimi · 2018–19"><span class="ff-cc">OM</span><i></i></button><span class="ff-yr">2018</span><span class="ff-tip" role="tooltip"><b>Indian School Buraimi</b><span>Buraimi · 2018–19</span></span></li><li class="ff-stop c-in" style="--i:9"><button type="button" class="ff-dot" aria-label="Wadihuda High School, then CHMKM Govt HSS, Payangadi, then Matool · 2019–22"><span class="ff-cc">IN</span><i></i></button><span class="ff-yr">2019</span><span class="ff-tip" role="tooltip"><b>Wadihuda High School, then CHMKM Govt HSS</b><span>Payangadi, then Matool · 2019–22</span></span></li><li class="ff-stop c-in" style="--i:10"><button type="button" class="ff-dot" aria-label="Yenepoya Institute of Technology, Moodbidri, Karnataka · BE AI &amp; ML · 2022–26"><span class="ff-cc">IN</span><i></i></button><span class="ff-yr">2022</span><span class="ff-tip" role="tooltip"><b>Yenepoya Institute of Technology</b><span>Moodbidri, Karnataka · BE AI &amp; ML · 2022–26</span></span></li><li class="ff-stop c-ae is-next" style="--i:11"><button type="button" class="ff-dot" aria-label="Next stop: the UAE, From November 2026"><span class="ff-cc">AE</span><i></i></button><span class="ff-yr">Nov '26</span><span class="ff-tip" role="tooltip"><b>Next stop: the UAE</b><span>From November 2026</span></span></li></ol>
     </div>
     <div class="ff-foot">
       <ul class="ff-stats">
         <li><b data-n="9">9</b> schools</li><li><b data-n="3">3</b> countries</li><li><b data-n="2">2</b> syllabi</li><li><b data-n="8">8</b> moves</li>
+        <li class="ff-nextchip"><span class="dot"></span>Next: UAE · Nov 2026</li>
       </ul>
       <ul class="ff-legend" aria-label="Legend">
         <li class="c-ae"><i></i>UAE</li><li class="c-om"><i></i>Oman</li><li class="c-in"><i></i>India</li>

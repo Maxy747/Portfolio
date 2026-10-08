@@ -1392,6 +1392,22 @@ html.theme-anim, html.theme-anim body, html.theme-anim *:not(.ff-fill):not(.sw-t
 @media (max-width: 400px) {
   .nav-cta .nav-btn { padding: 0 9px !important; }
 }
+
+/* Mobile navbar v2: a fixed 3-part row that never wraps (logo | buttons | menu), menu links below */
+@media (max-width: 720px) {
+  .nav-in { display: grid !important; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 0 8px !important; flex-wrap: nowrap; }
+  .nav-in .brand { grid-column: 1; grid-row: 1; }
+  .nav-cta { grid-column: 2; grid-row: 1; justify-self: end; margin-left: 0 !important; flex-wrap: nowrap; }
+  .menu-btn { grid-column: 3; grid-row: 1; }
+  .nav-links { grid-column: 1 / -1; grid-row: 2; }
+}
+@media (max-width: 480px) {
+  nav .nav-in .brand-txt { display: none !important; }
+}
+@media (max-width: 350px) {
+  .nav-cta .nav-btn:not(.primary) span { display: none; }
+  .nav-cta .nav-btn:not(.primary) { padding: 0 10px !important; }
+}
 </style>
 <script>
 (function () { try { var t = localStorage.getItem('max-theme'); if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t); } catch (e) {} })();

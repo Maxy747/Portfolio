@@ -1408,6 +1408,17 @@ html.theme-anim, html.theme-anim body, html.theme-anim *:not(.ff-fill):not(.sw-t
   .nav-cta .nav-btn:not(.primary) span { display: none; }
   .nav-cta .nav-btn:not(.primary) { padding: 0 10px !important; }
 }
+
+/* Contact form: honeypot + sent state */
+.hp { position: absolute !important; left: -9999px; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+.sent { border: 1px solid var(--ok); background: var(--panel-2); padding: 18px; display: grid; gap: 10px; outline: none; }
+.sent h3 { font-size: var(--s3); color: var(--ok); margin: 0; }
+#msg-send[disabled] { opacity: .75; cursor: progress; }
+@media (prefers-reduced-motion: no-preference) {
+  .sent:not([hidden]) { animation: rise .45s cubic-bezier(.2,.75,.2,1) both; }
+  #msg-send[disabled] { animation: sendPulse 1s ease-in-out infinite; }
+  @keyframes sendPulse { 50% { filter: brightness(1.15); } }
+}
 </style>
 <script>
 (function () { try { var t = localStorage.getItem('max-theme'); if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t); } catch (e) {} })();
@@ -1969,6 +1980,7 @@ html.theme-anim, html.theme-anim body, html.theme-anim *:not(.ff-fill):not(.sw-t
         <p class="form-note">Tell me who you are and what you have in mind. Fields marked <span style="color:var(--moon)">*</span> are required.</p>
       </div>
       <form class="msg-form" id="msg-form" novalidate>
+        <input type="checkbox" name="botcheck" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
         <div class="field"><label for="m-name">Name <i>*</i></label><input id="m-name" name="name" autocomplete="name" required maxlength="100"><span class="err" id="m-name-err"></span></div>
         <div class="field"><label for="m-email">Email <i>*</i></label><input id="m-email" name="email" type="email" autocomplete="email" required maxlength="150"><span class="err" id="m-email-err"></span></div>
         <div class="field"><label for="m-org">Company / organization</label><input id="m-org" name="org" autocomplete="organization" maxlength="120"></div>
@@ -1983,13 +1995,18 @@ html.theme-anim, html.theme-anim body, html.theme-anim *:not(.ff-fill):not(.sw-t
         <div class="field wide"><label for="m-link">Role or project link</label><input id="m-link" name="link" type="url" inputmode="url" placeholder="https://" maxlength="300"></div>
         <div class="field wide"><label for="m-msg">Message <i>*</i></label><textarea id="m-msg" name="message" required maxlength="4000"></textarea><span class="err" id="m-msg-err"></span></div>
         <div class="form-actions">
-          <button class="btn primary" type="submit">Prepare message</button>
+          <button class="btn primary" type="submit" id="msg-send">Send message</button>
           <button class="btn" type="button" id="msg-cancel">Cancel</button>
         </div>
       </form>
+      <div class="sent" id="msg-sent" hidden role="status" tabindex="-1">
+        <h3>Message sent ✓</h3>
+        <p class="form-note">Thanks, <span id="sent-name"></span>. It's in my inbox, and I'll reply to <span class="mono" id="sent-email"></span> soon.</p>
+        <div class="form-actions"><button class="btn" type="button" id="msg-again">Send another message</button></div>
+      </div>
       <div class="ready" id="msg-ready" hidden>
-        <h3>Your message is ready</h3>
-        <p class="form-note">Send it from your email app, or copy it and email it to <span class="mono" style="user-select:all">mr.mazinabdulazeez@gmail.com</span>.</p>
+        <h3 id="ready-h">Couldn't send it automatically</h3>
+        <p class="form-note">Your message is written out below. Send it from your email app, or copy it and email it to <span class="mono" style="user-select:all">mr.mazinabdulazeez@gmail.com</span>.</p>
         <pre id="msg-preview"></pre>
         <div class="form-actions">
           <a class="btn primary" id="msg-mailto" href="#">Open in email app</a>
@@ -2095,7 +2112,7 @@ html.theme-anim, html.theme-anim body, html.theme-anim *:not(.ff-fill):not(.sw-t
   var preview = document.getElementById('msg-preview'), mailto = document.getElementById('msg-mailto'), copyBtn = document.getElementById('msg-copy');
   function setOpen(on) {
     panel.hidden = !on; openBtn.setAttribute('aria-expanded', String(on));
-    if (on) { form.hidden = false; ready.hidden = true; document.getElementById('m-name').focus({ preventScroll: true }); panel.scrollIntoView({ block: 'nearest', behavior: reduce ? 'auto' : 'smooth' }); }
+    if (on) { form.hidden = false; ready.hidden = true; var sb = document.getElementById('msg-sent'); if (sb) sb.hidden = true; document.getElementById('m-name').focus({ preventScroll: true }); panel.scrollIntoView({ block: 'nearest', behavior: reduce ? 'auto' : 'smooth' }); }
   }
   openBtn.addEventListener('click', function () { setOpen(panel.hidden); });
   document.getElementById('msg-cancel').addEventListener('click', function () { setOpen(false); openBtn.focus(); });
@@ -2115,8 +2132,41 @@ html.theme-anim, html.theme-anim body, html.theme-anim *:not(.ff-fill):not(.sw-t
     preview.textContent = 'To: ' + TO + '\nSubject: ' + subject + '\n\n' + body;
     mailto.href = 'mailto:' + TO + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
     copyBtn.textContent = 'Copy message';
-    form.hidden = true; ready.hidden = false;
-    ready.scrollIntoView({ block: 'nearest', behavior: reduce ? 'auto' : 'smooth' });
+    var hp = form.querySelector('input[name="botcheck"]');
+    if (hp && hp.checked) return;
+    var sendBtn = document.getElementById('msg-send'), sentBox = document.getElementById('msg-sent');
+    function fallback() {
+      form.hidden = true; ready.hidden = false;
+      ready.scrollIntoView({ block: 'nearest', behavior: reduce ? 'auto' : 'smooth' });
+    }
+    sendBtn.disabled = true; sendBtn.textContent = 'Sending\u2026'; form.setAttribute('aria-busy', 'true');
+    var payload = {
+      access_key: 'fe69d889-9f99-4ee5-af68-e1bc408bf30d',
+      subject: 'Portfolio: ' + subject,
+      from_name: 'Portfolio contact form',
+      name: val('m-name'), email: em, replyto: em,
+      company: org || '-', reason: type, link: link || '-',
+      message: val('m-msg'), botcheck: false
+    };
+    var done = false, timer = setTimeout(function () { if (!done) { done = true; fallback(); reset(); } }, 15000);
+    function reset() { sendBtn.disabled = false; sendBtn.textContent = 'Send message'; form.removeAttribute('aria-busy'); }
+    fetch('https://api.web3forms.com/submit', {
+      method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify(payload)
+    }).then(function (r) { return r.json().then(function (j) { return { ok: r.ok && j && j.success, j: j }; }); })
+      .then(function (res) {
+        if (done) return; done = true; clearTimeout(timer); reset();
+        if (!res.ok) { fallback(); return; }
+        document.getElementById('sent-name').textContent = val('m-name');
+        document.getElementById('sent-email').textContent = em;
+        form.hidden = true; ready.hidden = true; sentBox.hidden = false;
+        sentBox.focus({ preventScroll: true });
+        sentBox.scrollIntoView({ block: 'nearest', behavior: reduce ? 'auto' : 'smooth' });
+        form.reset();
+      })
+      .catch(function () { if (done) return; done = true; clearTimeout(timer); reset(); fallback(); });
+  });
+  document.getElementById('msg-again').addEventListener('click', function () {
+    document.getElementById('msg-sent').hidden = true; form.hidden = false; document.getElementById('m-name').focus();
   });
   copyBtn.addEventListener('click', function () {
     function select() { var r = document.createRange(); r.selectNodeContents(preview); var sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); copyBtn.textContent = 'Selected. Press Ctrl+C'; }

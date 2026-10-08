@@ -1378,6 +1378,20 @@ html.theme-anim, html.theme-anim body, html.theme-anim *:not(.ff-fill):not(.sw-t
   :root:not([data-theme="dark"]) .nav-btn.primary, :root:not([data-theme="dark"]) .btn.primary, :root:not([data-theme="dark"]) .msg-open { color: #fff; }
 }
 @media (max-width: 400px) { .theme-btn { width: 32px; } }
+
+/* Mobile navbar: one control height, one gap */
+@media (max-width: 720px) {
+  .nav-in { gap: 8px !important; align-items: center; }
+  .nav-cta { gap: 8px !important; align-items: center; }
+  .nav-in .brand { align-self: center; }
+  .theme-btn, .nav-cta .nav-btn, .menu-btn { height: 36px !important; box-sizing: border-box; }
+  .theme-btn, .menu-btn { width: 36px !important; }
+  .nav-cta .nav-btn { padding: 0 11px !important; display: inline-flex; align-items: center; }
+  .nav-in .brand-mark { width: 30px; height: 30px; }
+}
+@media (max-width: 400px) {
+  .nav-cta .nav-btn { padding: 0 9px !important; }
+}
 </style>
 <script>
 (function () { try { var t = localStorage.getItem('max-theme'); if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t); } catch (e) {} })();

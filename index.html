@@ -1424,6 +1424,15 @@ html.theme-anim, html.theme-anim body, html.theme-anim *:not(.ff-fill):not(.sw-t
 .funfact .ff-dash { background: var(--ae) !important; opacity: 1 !important; }
 .funfact.ff-vert .ff-dash { background: var(--ae) !important; }
 .ff-stop.is-next .ff-dot i { border-style: solid !important; background: var(--ae); }
+
+/* Contact rows on phones: label on top, value + action below, numbers never split */
+@media (max-width: 640px) {
+  .contact-rows .crow { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px 10px; align-items: center; padding: 10px 12px; }
+  .contact-rows .crow .k { grid-column: 1 / -1; min-width: 0; font-size: .66rem; }
+  .contact-rows .crow .v { grid-column: 1; min-width: 0; overflow-wrap: anywhere; }
+  .contact-rows .crow .copy, .contact-rows .crow .resume-btns { grid-column: 2; grid-row: 2; }
+  #c-ph-ae, #c-ph-in { white-space: nowrap; }
+}
 </style>
 <script>
 (function () { try { var t = localStorage.getItem('max-theme'); if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t); } catch (e) {} })();
